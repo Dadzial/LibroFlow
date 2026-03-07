@@ -1,0 +1,42 @@
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from '../screens/home/HomeScreen';
+import SearchScreen from "../screens/search/SearchScreen";
+import TrashScreen from "../screens/trash/TrashScreen";
+import LottoScreen from "../screens/lotto/LottoScreen"
+import LibraryScreen from "../screens/library/LibraryScreen";
+import { Ionicons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
+
+const BottomTabs = () => {
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarActiveTintColor: 'blue',
+                tabBarInactiveTintColor: 'gray',
+                tabBarIcon: ({ color, size }) => {
+                    let iconName: string;
+                    switch (route.name) {
+                        case 'Home': iconName = 'home'; break;
+                        case 'Profile': iconName = 'person'; break;
+                        case 'Settings': iconName = 'settings'; break;
+                        case 'Notifications': iconName = 'notifications'; break;
+                        case 'Search': iconName = 'search'; break;
+                        default: iconName = 'ellipse';
+                    }
+                    return <Ionicons name={iconName as any} size={size} color={color} />;
+                },
+            })}
+        >
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Library" component={LibraryScreen} />
+            <Tab.Screen name="Lotto" component={LottoScreen} />
+            <Tab.Screen name="Trash" component={TrashScreen} />
+            <Tab.Screen name="Search" component={SearchScreen} />
+        </Tab.Navigator>
+    );
+};
+
+export default BottomTabs;

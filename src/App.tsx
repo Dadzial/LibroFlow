@@ -1,8 +1,12 @@
-import HomeScreen from "./screens/home/HomeScreen";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import BottomTabs from './navigation/BottomTabs';
 
 export default function App() {
   return (
-    <HomeScreen/>
+      <NavigationContainer>
+        <BottomTabs />
+      </NavigationContainer>
   );
 }
 

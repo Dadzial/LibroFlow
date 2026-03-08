@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
-import {lottoStyles} from "./LottoScreen.styles";
+import {randomStyles} from "./LottoScreen.styles";
 
-export default function LottoScreen() {
+export default function RandomScreen() {
     return (
-        <View style={lottoStyles.container}>
-            <Text>This is lotto!</Text>
+        <View style={randomStyles.container}>
+            <Text>This is Random!</Text>
             <StatusBar style="auto" />
         </View>
     );

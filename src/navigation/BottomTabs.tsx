@@ -9,9 +9,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabs = () => {
+export default function BottomTabs(){
     return (
         <Tab.Navigator
+            initialRouteName="Home"
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarActiveTintColor: '#6A28B0',
@@ -39,4 +40,3 @@ const BottomTabs = () => {
     );
 };
 
-export default BottomTabs;

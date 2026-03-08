@@ -6,7 +6,6 @@ export default function SearchScreen() {
     return (
         <View style={searchStyles.container}>
             <Text>This is search!</Text>
-            <StatusBar style="auto" />
         </View>
     );
 }

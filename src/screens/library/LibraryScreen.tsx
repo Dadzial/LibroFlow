@@ -6,7 +6,6 @@ export default function LibraryScreen() {
     return (
         <View style={libraryStyles.container}>
             <Text>This is library!</Text>
-            <StatusBar style="auto" />
         </View>
     );
 }

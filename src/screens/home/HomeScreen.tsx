@@ -6,7 +6,6 @@ export default function HomeScreen() {
     return (
         <View style={homeStyles.container}>
             <Text>This is home!</Text>
-            <StatusBar style="auto" />
         </View>
     );
 }

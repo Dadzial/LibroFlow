@@ -6,7 +6,6 @@ export default function RandomScreen() {
     return (
         <View style={randomStyles.container}>
             <Text>This is Random!</Text>
-            <StatusBar style="auto" />
         </View>
     );
 }

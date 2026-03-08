@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import BottomTabs from './navigation/BottomTabs';
+import RootNavigator from './navigation/RootNavigator';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
-  return (
-      <NavigationContainer>
-        <BottomTabs />
-      </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <StatusBar style="dark" />
+            <RootNavigator />
+        </NavigationContainer>
+    );
 }
-

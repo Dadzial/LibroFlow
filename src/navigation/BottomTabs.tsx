@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/home/HomeScreen';
 import SearchScreen from "../screens/search/SearchScreen";
 import TrashScreen from "../screens/trash/TrashScreen";
-import LottoScreen from "../screens/lotto/LottoScreen"
+import LottoScreen from "../screens/lotto/RandomScreen"
 import LibraryScreen from "../screens/library/LibraryScreen";
 import { Ionicons } from '@expo/vector-icons';
 

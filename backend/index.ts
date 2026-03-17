@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import { connectToDatabase } from './db-adapter';
+import logger from './utils/logger';
 
 const app = express();
 app.use(cors());
@@ -7,6 +9,8 @@ app.use(express.json());
 
 //Here will be routes
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+connectToDatabase().then(() => {
+    app.listen(3000, () => {
+        logger.info('Server is running on port 3000')
+    })
+})

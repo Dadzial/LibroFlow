@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const config =  {
     PORT: 3000,
-    databaseUrl: 'To complete'
+    databaseUrl: process.env.DATABASE_URL as string
 }

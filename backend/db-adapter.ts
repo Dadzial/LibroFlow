@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import { config } from './config';
 import  logger  from './utils/logger';
+import {AllBooksService} from "./services/all-books.services";
 
 export const connectToDatabase = async (): Promise<void> => {
     try {
         await mongoose.connect(config.databaseUrl);
-        logger.info('Connection with database established');
+        logger.info('Connection with database established')
+        await AllBooksService.seed()
     } catch (error) {
         logger.error('Error connecting to MongoDB:', error);
     }

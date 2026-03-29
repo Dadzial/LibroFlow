@@ -1,9 +1,10 @@
 import {StyleSheet} from "react-native";
+import {getColor} from "../../utils/ColorsParser";
 
 export const searchStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: getColor('primaryColor'),
         alignItems: 'center',
         justifyContent: 'center',
     },

@@ -22,7 +22,7 @@ export default function BottomTabs(){
                     switch (route.name) {
                         case 'Home': iconName = 'home'; break;
                         case 'Library': iconName = 'library'; break;
-                        case 'Random': iconName = 'dice'; break;
+                        case 'Draw': iconName = 'dice'; break;
                         case 'Trash': iconName = 'trash'; break;
                         case 'Search': iconName = 'search'; break;
                         default: iconName = 'ellipse';
@@ -32,7 +32,7 @@ export default function BottomTabs(){
             })}
         >
             <Tab.Screen name="Library" component={LibraryScreen} />
-            <Tab.Screen name="Random" component={LottoScreen} />
+            <Tab.Screen name="Draw" component={LottoScreen} />
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Trash" component={TrashScreen} />
             <Tab.Screen name="Search" component={SearchScreen} />

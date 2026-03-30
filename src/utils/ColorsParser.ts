@@ -3,7 +3,8 @@ export const ColorsParser = {
     secondColor:'#FFFFFF',
     accent:'#6A28B0',
     textPrimaryColor:'#454747',
-    scrollbarColor:'#909191'
+    scrollbarColor:'#909191',
+    accentRed:'#FC090E'
 }
 
 export const getColor = (name: keyof typeof ColorsParser) => ColorsParser[name];

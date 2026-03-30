@@ -1,26 +1,19 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {getColor} from "../utils/ColorsParser";
 
-type Book = {
-    cover:string,
-    title:string,
-    author:string,
-}
-
-const newBooks: Book[] = []
-
-export default function NewBooks() {
+export default function TrashList() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>New Books</Text>
+                <Text style={styles.headerTitle}>4 Items found</Text>
                 <TouchableOpacity>
-                    <Text style={styles.viewAll}>View all</Text>
+                    <Text style={styles.cleanTrash}>Clean Trash</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 25,
@@ -33,12 +26,12 @@ const styles = StyleSheet.create({
     },
     headerTitle:{
         fontSize: 15,
-        fontWeight: 'bold',
+        fontWeight: '600',
         color: getColor('textPrimaryColor'),
     },
-    viewAll:{
+    cleanTrash:{
         fontSize: 15,
         fontWeight: 'bold',
-        color: getColor('accent'),
+        color: getColor('accentRed'),
     },
 })

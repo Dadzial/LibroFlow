@@ -18,5 +18,6 @@ export const AllBooksService = {
         logger.info('Database seeded successfully')
     },
 
-    getAll: (status?: string) => Book.find(status ? { status } : {})
+    getAll: (status?: string) => Book.find(status ? { status } : {}),
+    search: (title: string) => Book.find({title: { $regex: title, $options: 'i' }}).limit(20)
 }

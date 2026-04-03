@@ -33,3 +33,7 @@
 {"level":"info","message":"Server is running on port 3000","timestamp":"2026-03-29 13:17:56"}
 {"level":"info","message":"Books fetched successfully","timestamp":"2026-03-29 13:18:01"}
 {"level":"info","message":"MongoDB disconnected","timestamp":"2026-03-29 13:18:49"}
+{"level":"info","message":"Connection with database established","timestamp":"2026-04-03 22:34:24"}
+{"level":"info","message":"Database seeded successfully","timestamp":"2026-04-03 22:34:29"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2026-04-03 22:34:29"}
+{"level":"info","message":"MongoDB disconnected","timestamp":"2026-04-03 22:35:33"}

@@ -1,4 +1,4 @@
-import Book from '../models/all-books.model'
+import Book from '../models/books.model'
 import { GoogleBooksAPI } from '../utils/google-books-connect'
 import logger from "../utils/logger";
 

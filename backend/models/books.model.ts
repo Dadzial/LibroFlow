@@ -8,6 +8,7 @@ const BookSchema = new mongoose.Schema({
     description: { type: String },
     rating:      { type: Number, min: 1, max: 5, default: null },
     isbn:        { type: String },
+    publishedDate: { type: Date },
     status:      { type: String, enum: ['none', 'reading', 'done', 'trash'], default: 'none' }
 }, { timestamps: true })
 

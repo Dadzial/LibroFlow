@@ -42,5 +42,5 @@ yarn-error.*
 
 .env
 /logs
-/backend/logs
+/backend/logs/
 

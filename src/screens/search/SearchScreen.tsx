@@ -4,8 +4,11 @@ import SearchBar from "../../components/SearchBar"
 import QuickFilters from "../../components/QuickFilters";
 import NewBooks from "../../components/NewBooks";
 import AllBooks from "../../components/AllBooks";
+import {useState} from "react";
 
 export default function SearchScreen() {
+    const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
     return (
         <View style={searchStyles.mainContainer}>
             <View style={searchStyles.screenTitleContainer}>
@@ -15,13 +18,16 @@ export default function SearchScreen() {
                 <SearchBar />
             </View>
             <View style={searchStyles.quickFiltersContainer}>
-                <QuickFilters />
+                <QuickFilters
+                    activeCategory={activeCategory}
+                    onCategoryChange={setActiveCategory}
+                />
             </View>
             <View style={searchStyles.newBooksContainer}>
-                <NewBooks />
+                <NewBooks activeCategory={activeCategory} />
             </View>
             <View style={searchStyles.allBooksContainer}>
-                <AllBooks />
+                <AllBooks activeCategory={activeCategory} />
             </View>
         </View>
     );

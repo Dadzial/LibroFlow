@@ -15,6 +15,7 @@ export const GoogleBooksAPI = {
                 author:      item.volumeInfo.authors?.[0] ?? 'Author unknown',
                 cover:       item.volumeInfo.imageLinks?.thumbnail ?? null,
                 description: item.volumeInfo.description ?? null,
+                categories:  item.volumeInfo.categories ?? [],
                 rating:      item.volumeInfo.averageRating ?? null,
                 publishedDate: item.volumeInfo.publishedDate ?? null,
                 isbn:        item.volumeInfo.industryIdentifiers?.[0]?.identifier ?? null

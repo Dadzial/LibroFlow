@@ -9,7 +9,7 @@ export const searchStyles = StyleSheet.create({
     screenTitleContainer: {
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 5,
+        marginBottom: 0,
     },
     screenTitle: {
         fontSize: 25,
@@ -21,15 +21,15 @@ export const searchStyles = StyleSheet.create({
     },
     searchBarContainer: {
         paddingHorizontal: 15,
-        paddingVertical: 10,
+        paddingVertical: 5,
     },
     quickFiltersContainer: {
-        marginTop: 10,
+        marginTop: 2,
     },
     newBooksContainer: {
-        marginTop: 10,
+        marginTop: -5,
     },
     allBooksContainer: {
-        marginTop: 10,
+        marginTop: 0,
     }
 });

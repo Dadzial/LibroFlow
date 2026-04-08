@@ -23,12 +23,12 @@ export default function SearchBar() {
 const styles = StyleSheet.create({
     searchBarContainer: {
         flexDirection: 'row',
-        height: 50,
+        height: 45,
         alignItems: 'center',
         backgroundColor: getColor('secondColor'),
         borderRadius: 20,
         marginHorizontal: 15,
-        paddingHorizontal: 12,
+        paddingHorizontal: 10,
         elevation: 25,
 
     },

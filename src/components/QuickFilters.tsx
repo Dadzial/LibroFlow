@@ -18,11 +18,15 @@ const Filters: Filter[] = [
     { id: '8', name: 'Historical' },
 ]
 
-export default function QuickFilters() {
-    const [filterActive, setFilterActive] = useState<string | null>(null);
+type QuickFiltersProps = {
+    activeCategory: string | null;
+    onCategoryChange: (category: string | null) => void;
+}
+
+export default function QuickFilters({activeCategory, onCategoryChange}: QuickFiltersProps) {
 
     const handleClearFilters = () => {
-        setFilterActive(null);
+        onCategoryChange(null);
     }
 
     return (
@@ -42,13 +46,13 @@ export default function QuickFilters() {
                     <TouchableOpacity
                         style={[
                             styles.filterButton,
-                            filterActive === item.id && styles.filterButtonActive
+                            activeCategory === item.name && styles.filterButtonActive
                         ]}
-                        onPress={() => setFilterActive(item.id)}
+                        onPress={() => onCategoryChange(item.name)}
                     >
                         <Text style={[
                             styles.filterText,
-                            filterActive === item.id && styles.filterTextActive
+                            activeCategory === item.name && styles.filterTextActive
                         ]}>
                             {item.name}
                         </Text>
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 4,
-        marginBottom: 5
+        marginBottom: 2
     },
     headerTitle:{
         fontSize: 15,
@@ -81,13 +85,13 @@ const styles = StyleSheet.create({
     },
     filterButton: {
         flex: 1,
-        height: 40,
-        margin: 6,
+        height: 35,
+        margin: 3,
         borderRadius: 20,
         backgroundColor: getColor('secondColor'),
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 5,
+        elevation: 1,
     },
     filterButtonActive: {
         backgroundColor: getColor('accent'),

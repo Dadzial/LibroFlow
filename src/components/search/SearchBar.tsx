@@ -1,7 +1,7 @@
 import {StyleSheet, View, TextInput,Image} from 'react-native';
-import {getColor} from "../utils/ColorsParser";
+import {getColor} from "../../utils/ColorsParser";
 import {useState} from "react";
-import {getIcon} from "../utils/IconParser";
+import {getIcon} from "../../utils/IconParser";
 
 export default function SearchBar() {
     const [searchText, setSearchText] = useState('');

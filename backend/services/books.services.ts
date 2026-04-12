@@ -1,6 +1,6 @@
-import Book from '../models/books.model.js'
-import { GoogleBooksAPI } from '../utils/google-books-connect.js'
-import logger from "../utils/logger.js";
+import Book from '../models/books.model'
+import { GoogleBooksAPI } from '../utils/google-books-connect'
+import logger from "../utils/logger";
 
 export const AllBooksService = {
 

@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 import {trashStyles} from "./TrashScreen.styles";
-import TrashList from "../../components/TrashList";
+import TrashList from "../../components/trash/TrashList";
 
 export default function TrashScreen() {
     return (

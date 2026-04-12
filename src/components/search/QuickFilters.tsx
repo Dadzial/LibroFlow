@@ -1,5 +1,5 @@
 import {StyleSheet, View, FlatList,TouchableOpacity,Text} from 'react-native';
-import {getColor} from "../utils/ColorsParser";
+import {getColor} from "../../utils/ColorsParser";
 import {useState} from "react";
 
 type Filter = {

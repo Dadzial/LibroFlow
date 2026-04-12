@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native';
 import {searchStyles} from "./SearchScreen.styles";
-import SearchBar from "../../components/SearchBar"
-import QuickFilters from "../../components/QuickFilters";
-import NewBooks from "../../components/NewBooks";
-import AllBooks from "../../components/AllBooks";
+import SearchBar from "../../components/search/SearchBar"
+import QuickFilters from "../../components/search/QuickFilters";
+import NewBooks from "../../components/search/NewBooks";
+import AllBooks from "../../components/search/AllBooks";
 import {useState} from "react";
 
 export default function SearchScreen() {

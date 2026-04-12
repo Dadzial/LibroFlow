@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import { connectToDatabase } from './db-adapter.js';
-import logger from './utils/logger.js';
-import {getAllBooks,search} from "./routes/books.routes.js";
+import { connectToDatabase } from './db-adapter';
+import logger from './utils/logger';
+import {getAllBooks,search} from "./routes/books.routes";
 
 const app = express();
 app.use(cors());

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {getColor} from "../utils/ColorsParser";
+import {getColor} from "../../utils/ColorsParser";
 
 export default function TrashList() {
     return (

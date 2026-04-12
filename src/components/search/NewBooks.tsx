@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {Animated, ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native';
-import {getColor} from "../utils/ColorsParser";
-import {fetchAllBooks} from "../api/FetchAllBooks";
+import {getColor} from "../../utils/ColorsParser";
+import {fetchAllBooks} from "../../api/FetchAllBooks";
 
 type NewBook = {
     googleId?: string;

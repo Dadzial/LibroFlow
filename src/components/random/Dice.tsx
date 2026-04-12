@@ -1,9 +1,10 @@
 import { View, Image, StyleSheet, Animated, Easing } from 'react-native';
 import { useRef } from 'react';
+import {getIcon} from "../../utils/IconParser";
 
 export default function Dice({ animate }: any) {
     const rotateAnim = useRef(new Animated.Value(0)).current;
-
+    const diceIcon = getIcon('drawIcon');
     const spin = () => {
         rotateAnim.setValue(0);
 
@@ -27,7 +28,7 @@ export default function Dice({ animate }: any) {
     return (
         <View style={styles.container}>
             <Animated.Image
-                    source={require('../../../assets/draw.png')}
+                source={diceIcon}
                 style={[
                     styles.image,
                     { transform: [{ rotate }] },

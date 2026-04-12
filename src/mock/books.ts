@@ -1,5 +1,3 @@
-// src/api/mock/books.ts
-
 export const currentBook = {
     id: 1,
     title: "Diuna",

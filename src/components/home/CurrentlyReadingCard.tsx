@@ -9,7 +9,6 @@ export default function CurrentlyReadingCard({ book }: any) {
                 <Text style={styles.author}>{book.author}</Text>
                 <Text style={styles.title}>{book.title}</Text>
 
-                {/* Progress */}
                 <View style={styles.progressRow}>
                     <View style={styles.progressBar}>
                         <View
@@ -24,7 +23,6 @@ export default function CurrentlyReadingCard({ book }: any) {
                     </Text>
                 </View>
 
-                {/* Button */}
                 <TouchableOpacity
                     style={styles.button}
                     activeOpacity={0.7}
@@ -45,10 +43,8 @@ const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 28,
 
-        // Android
         elevation: 3,
 
-        // iOS
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 6,

@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator, Animated, Dimensions} from 'react-native';
-import {getColor} from "../utils/ColorsParser";
-import {fetchAllBooks} from "../api/FetchAllBooks";
+import {getColor} from "../../utils/ColorsParser";
+import {fetchAllBooks} from "../../api/FetchAllBooks";
 import React, {useEffect, useRef, useState} from 'react';
 
 type Book = {

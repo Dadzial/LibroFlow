@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         marginHorizontal: 40,
+        elevation: 5
     },
     primaryText: {
         color: '#fff',
@@ -35,11 +36,12 @@ const styles = StyleSheet.create({
     },
     secondary: {
         marginTop: 10,
-        backgroundColor: '#eee',
+        backgroundColor: '#ffffff',
         paddingVertical: 12,
         borderRadius: 20,
         alignItems: 'center',
         marginHorizontal: 40,
+        elevation: 5
     },
     secondaryText: {
         color: '#7B3FE4',

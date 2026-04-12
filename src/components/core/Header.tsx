@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, StyleSheet, Image, Platform, StatusBar, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getIcon } from '../utils/IconParser';
-import {getColor} from "../utils/ColorsParser";
+import { getIcon } from '../../utils/IconParser';
+import {getColor} from "../../utils/ColorsParser";
 
 export default function Header() {
     return (

@@ -1,5 +1,5 @@
-import logger from '../utils/logger'
-import {AllBooksService} from "../services/books.services";
+import logger from '../utils/logger.js'
+import {AllBooksService} from "../services/books.services.js";
 
 export const getAllBooks = async (req: any, res: any) => {
     try {

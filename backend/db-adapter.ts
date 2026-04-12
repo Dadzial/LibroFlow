@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { config } from './config';
-import  logger  from './utils/logger';
-import {AllBooksService} from "./services/books.services";
+import { config } from './config.js';
+import  logger  from './utils/logger.js';
+import {AllBooksService} from "./services/books.services.js";
 
 export const connectToDatabase = async (): Promise<void> => {
     try {

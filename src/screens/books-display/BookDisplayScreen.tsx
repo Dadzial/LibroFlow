@@ -39,7 +39,6 @@ export default function BookDisplayScreen() {
 
     return (
         <View style={bookDisplayScreenStyles.container}>
-            {/* X close button */}
             <TouchableOpacity
                 style={bookDisplayScreenStyles.closeButton}
                 onPress={() => navigation.goBack()}

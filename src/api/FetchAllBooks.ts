@@ -1,10 +1,13 @@
-import { API_BASE_URL } from "../utils/config";
+import { API_BASE_URL } from "../utils/Config";
 
 interface Book {
     googleId: string;
     title: string;
     author: string;
     cover: string;
+    description: string;
+    pageCount: number;
+    language : string;
 }
 
 export const fetchAllBooks = async (status: string) => {

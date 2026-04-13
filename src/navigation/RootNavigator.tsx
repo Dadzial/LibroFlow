@@ -1,9 +1,15 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import Header from '../components/core/Header';
+import BookDisplayScreen from "../screens/books-display/BookDisplayScreen";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+    Main:undefined;
+    BookDisplay: { bookId: string };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
     return (
@@ -13,6 +19,7 @@ export default function RootNavigator() {
             }}
         >
             <Stack.Screen name="Main" component={BottomTabs} />
+            <Stack.Screen name="BookDisplay" component={BookDisplayScreen} />
         </Stack.Navigator>
     );
 }

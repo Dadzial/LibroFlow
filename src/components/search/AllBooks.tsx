@@ -2,6 +2,9 @@ import {StyleSheet, Text, TouchableOpacity, View, Image, ActivityIndicator, Anim
 import {getColor} from "../../utils/ColorsParser";
 import {fetchAllBooks} from "../../api/FetchAllBooks";
 import React, {useEffect, useRef, useState} from 'react';
+import {useNavigation} from "@react-navigation/native";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {RootStackParamList} from "../../navigation/RootNavigator";
 
 type Book = {
     googleId?: string;
@@ -19,6 +22,7 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 50 - 30) / 3;
 
 export default function AllBooks({activeCategory}: AllBooksProps) {
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
     const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const scrollX = useRef(new Animated.Value(0)).current;
@@ -48,7 +52,10 @@ export default function AllBooks({activeCategory}: AllBooksProps) {
         : books
 
     const renderBookItem = ({ item }: { item: Book }) => (
-        <TouchableOpacity style={styles.bookCard}>
+        <TouchableOpacity
+            style={styles.bookCard}
+            onPress={() => navigation.navigate('BookDisplay', { bookId: item.googleId || item.title })} // lub przekaz cały obiekt
+        >
             <Image
                 source={{ uri: item.cover }}
                 style={styles.bookCover}

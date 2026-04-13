@@ -18,7 +18,9 @@ export const GoogleBooksAPI = {
                 categories:  item.volumeInfo.categories ?? [],
                 rating:      item.volumeInfo.averageRating ?? null,
                 publishedDate: item.volumeInfo.publishedDate ?? null,
-                isbn:        item.volumeInfo.industryIdentifiers?.[0]?.identifier ?? null
+                isbn:        item.volumeInfo.industryIdentifiers?.[0]?.identifier ?? null,
+                pageCount:   item.volumeInfo.pageCount ?? null,
+                language:    item.volumeInfo.language ?? null,
             }))
             .filter((book: any) => book.description !== null)
     }

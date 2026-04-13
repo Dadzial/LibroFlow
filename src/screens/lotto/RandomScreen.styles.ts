@@ -67,7 +67,7 @@ export const randomStyles = StyleSheet.create({
     },
 
     booksWrapper: {
-        marginTop: 18,
+        marginTop: 10,
     },
 
     actionsWrapper: {

@@ -58,13 +58,13 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
     }, []);
 
     const displayBooks = activeCategory
-        ? newBooks.filter(book =>{
+        ? newBooks.filter(book => {
             if (!book.categories) return false;
             return book.categories.some(cat =>
                 cat.toLowerCase().includes(activeCategory.toLowerCase())
             );
         })
-        : newBooks
+        : newBooks;
 
     const filteredBooks = displayBooks.filter(book =>
         book.title.toLowerCase().includes(searchText.toLowerCase()) ||

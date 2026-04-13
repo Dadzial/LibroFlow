@@ -44,13 +44,13 @@ export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
     }, []);
 
     const displayBooks = activeCategory
-        ? books.filter(book =>{
+        ? books.filter(book => {
             if (!book.categories) return false;
             return book.categories.some(cat =>
                 cat.toLowerCase().includes(activeCategory.toLowerCase())
             );
         })
-        : books
+        : books;
 
     const filteredBooks = displayBooks.filter(book =>
         book.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -60,7 +60,7 @@ export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
     const renderBookItem = ({ item }: { item: Book }) => (
         <TouchableOpacity
             style={styles.bookCard}
-            onPress={() => navigation.navigate('BookDisplay', { bookId: item.googleId || item.title })} // lub przekaz cały obiekt
+            onPress={() => navigation.navigate('BookDisplay', { bookId: item.googleId || item.title })}
         >
             <Image
                 source={{ uri: item.cover }}

@@ -4,7 +4,19 @@ import SearchBar from "../../components/search/SearchBar"
 import QuickFilters from "../../components/search/QuickFilters";
 import NewBooks from "../../components/search/NewBooks";
 import AllBooks from "../../components/search/AllBooks";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {fetchAllBooks} from "../../api/FetchAllBooks";
+
+const MAIN_CATEGORIES = [
+    'Fantasy',
+    'Sci-Fi',
+    'Classics',
+    'Mystery',
+    'Criminal',
+    'Horror',
+    'Romance',
+    'Historical',
+];
 
 export default function SearchScreen() {
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -22,6 +34,7 @@ export default function SearchScreen() {
                 <QuickFilters
                     activeCategory={activeCategory}
                     onCategoryChange={setActiveCategory}
+                    categories={MAIN_CATEGORIES}
                 />
             </View>
             <View style={searchStyles.newBooksContainer}>

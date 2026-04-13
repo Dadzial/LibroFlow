@@ -1,27 +1,29 @@
-import { View, Image, StyleSheet, Animated } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { books } from '../../mock/books';
+import { View, Image, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
 
 interface BookPreviewProps {
-    isDrawing?: boolean;
-    finalBook?: typeof books[0] | null;
+    isDrawing: boolean;
+    finalBook: any;
+    books: any[];
 }
 
-export default function BookPreview({ isDrawing, finalBook }: BookPreviewProps) {
+export default function BookPreview({ isDrawing, finalBook, books }: BookPreviewProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if (isDrawing) {
+        if (isDrawing && books.length > 0) {
             interval = setInterval(() => {
                 setCurrentIndex(Math.floor(Math.random() * books.length));
             }, 100);
-        } else if (finalBook) {
-            const index = books.findIndex(b => b.id === finalBook.id);
+        } else if (finalBook && books.length > 0) {
+            const index = books.findIndex(b => b.googleId === finalBook.googleId || b.title === finalBook.title);
             setCurrentIndex(index >= 0 ? index : 0);
         }
         return () => clearInterval(interval);
-    }, [isDrawing, finalBook]);
+    }, [isDrawing, finalBook, books]);
+
+    if (!books.length) return null;
 
     const displayIndex = currentIndex;
     const leftIndex = (currentIndex + 1) % books.length;

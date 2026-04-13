@@ -1,30 +1,13 @@
 import {StyleSheet, View, FlatList,TouchableOpacity,Text} from 'react-native';
 import {getColor} from "../../utils/ColorsParser";
-import {useState} from "react";
-
-type Filter = {
-    id: string;
-    name: string;
-}
-
-const Filters: Filter[] = [
-    { id: '1', name: 'Fantasy' },
-    { id: '2', name: 'Sci-Fi' },
-    { id: '3', name: 'Classics' },
-    { id: '4', name: 'Mystery' },
-    { id: '5', name: 'Criminal' },
-    { id: '6', name: 'Horror' },
-    { id: '7', name: 'Romance' },
-    { id: '8', name: 'Historical' },
-]
 
 type QuickFiltersProps = {
     activeCategory: string | null;
     onCategoryChange: (category: string | null) => void;
+    categories: string[];
 }
 
-export default function QuickFilters({activeCategory, onCategoryChange}: QuickFiltersProps) {
-
+export default function QuickFilters({activeCategory, onCategoryChange, categories}: QuickFiltersProps) {
     const handleClearFilters = () => {
         onCategoryChange(null);
     }
@@ -38,23 +21,23 @@ export default function QuickFilters({activeCategory, onCategoryChange}: QuickFi
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={Filters}
-                keyExtractor={(item) => item.id}
+                data={categories}
+                keyExtractor={(item) => item}
                 numColumns={4}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={[
                             styles.filterButton,
-                            activeCategory === item.name && styles.filterButtonActive
+                            activeCategory === item && styles.filterButtonActive
                         ]}
-                        onPress={() => onCategoryChange(item.name)}
+                        onPress={() => onCategoryChange(item)}
                     >
                         <Text style={[
                             styles.filterText,
-                            activeCategory === item.name && styles.filterTextActive
+                            activeCategory === item && styles.filterTextActive
                         ]}>
-                            {item.name}
+                            {item}
                         </Text>
                     </TouchableOpacity>
                 )}

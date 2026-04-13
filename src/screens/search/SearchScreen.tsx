@@ -8,6 +8,7 @@ import {useState} from "react";
 
 export default function SearchScreen() {
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
+    const [searchText, setSearchText] = useState('');
 
     return (
         <View style={searchStyles.mainContainer}>
@@ -15,7 +16,7 @@ export default function SearchScreen() {
                 <Text style={searchStyles.screenTitle}>Search</Text>
             </View>
             <View style={searchStyles.searchBarContainer}>
-                <SearchBar />
+                <SearchBar searchText={searchText} onSearch={setSearchText} />
             </View>
             <View style={searchStyles.quickFiltersContainer}>
                 <QuickFilters
@@ -24,10 +25,10 @@ export default function SearchScreen() {
                 />
             </View>
             <View style={searchStyles.newBooksContainer}>
-                <NewBooks activeCategory={activeCategory} />
+                <NewBooks activeCategory={activeCategory} searchText={searchText} />
             </View>
             <View style={searchStyles.allBooksContainer}>
-                <AllBooks activeCategory={activeCategory} />
+                <AllBooks activeCategory={activeCategory} searchText={searchText} />
             </View>
         </View>
     );

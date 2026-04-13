@@ -3,7 +3,7 @@ import BookPreview from "./BookPreview";
 
 const data = Array(6).fill({});
 
-export default function AllBooks() {
+export default function MyBooks() {
     return (
         <View style={{ alignItems: 'center', width: '100%' }}>
             <FlatList

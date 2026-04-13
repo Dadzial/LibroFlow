@@ -1,6 +1,6 @@
 import {ScrollView, Text, View, TouchableOpacity, Dimensions} from 'react-native';
 import { libraryStyles } from "./LibraryScreen.styles";
-import AllBooks from "../../components/library/AllBooks";
+import MyBooks from "../../components/library/MyBooks";
 import BookPreview from "../../components/library/BookPreview";
 
 const { width } = Dimensions.get('window');
@@ -53,7 +53,7 @@ export default function LibraryScreen() {
                 </View>
 
                 <View style={libraryStyles.section}>
-                    <AllBooks />
+                    <MyBooks />
                 </View>
 
             </ScrollView>

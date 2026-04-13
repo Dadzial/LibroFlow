@@ -18,12 +18,13 @@ type NewBook = {
 
 type AllBooksProps = {
     activeCategory:string | null
+    searchText:string
 }
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 50 - 30) / 3;
 
-export default function NewBooks({activeCategory}: AllBooksProps) {
+export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
     const [newBooks, setNewBooks] = useState<NewBook[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -65,6 +66,11 @@ export default function NewBooks({activeCategory}: AllBooksProps) {
         })
         : newBooks
 
+    const filteredBooks = displayBooks.filter(book =>
+        book.title.toLowerCase().includes(searchText.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchText.toLowerCase())
+    );
+
     const renderBookItem = ({ item }: { item: NewBook }) => (
         <TouchableOpacity
             style={styles.bookCard}
@@ -100,7 +106,7 @@ export default function NewBooks({activeCategory}: AllBooksProps) {
             ) : (
                 <View>
                     <Animated.FlatList
-                        data={displayBooks}
+                        data={filteredBooks}
                         renderItem={renderBookItem}
                         keyExtractor={(item, index) => item.googleId ? item.googleId : index.toString()}
                         horizontal={true}

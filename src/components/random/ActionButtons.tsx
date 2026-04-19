@@ -1,17 +1,27 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function ActionButtons() {
+interface ActionButtonsProps {
+    onAddToLibrary?: () => void;
+    onStartReading?: () => void;
+    disabled?: boolean;
+}
+
+export default function ActionButtons({ onAddToLibrary, onStartReading, disabled }: ActionButtonsProps) {
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={styles.primary}
-                onPress={() => console.log('Start reading pressed')}>
+                style={[styles.primary, disabled && { opacity: 0.5 }]}
+                onPress={onStartReading}
+                disabled={disabled}
+            >
                 <Text style={styles.primaryText}>Start reading</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={styles.secondary}
-                onPress={() => console.log('Add to library pressed')}>
+                style={[styles.secondary, disabled && { opacity: 0.5 }]}
+                onPress={onAddToLibrary}
+                disabled={disabled}
+            >
                 <Text style={styles.secondaryText}>Add to library</Text>
             </TouchableOpacity>
         </View>

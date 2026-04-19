@@ -1,24 +1,37 @@
 import { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import { randomStyles } from "./RandomScreen.styles";
 
 import Dice from '../../components/random/Dice';
 import BookPreview from '../../components/random/BookPreview';
 import ActionButtons from '../../components/random/ActionButtons';
 import { fetchAllBooks } from '../../api/FetchAllBooks';
+import { useBooks, Book } from '../../context/BooksContext';
 
 export default function RandomScreen() {
     const [animateDice, setAnimateDice] = useState(false);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [drawnBook, setDrawnBook] = useState<any>(null);
-    const [books, setBooks] = useState<any[]>([]);
+    const [drawnBook, setDrawnBook] = useState<Book | null>(null);
+    const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
+    const { addBookToLibrary } = useBooks();
 
     useEffect(() => {
         const loadBooks = async () => {
             try {
-                const fetchedBooks = await fetchAllBooks('none');
-                setBooks(fetchedBooks);
+                const fetchedBooks: any[] = await fetchAllBooks('none');
+                
+                const mappedBooks: Book[] = fetchedBooks.map(b => ({
+                    id: b.googleId || b.title,
+                    title: b.title,
+                    author: b.author,
+                    cover: b.cover,
+                    pageCount: b.pageCount,
+                    language: b.language,
+                    description: b.description
+                }));
+                
+                setBooks(mappedBooks);
             } catch (e) {
                 setBooks([]);
             } finally {
@@ -41,6 +54,12 @@ export default function RandomScreen() {
         }, 1500);
     };
 
+    const handleAddToLibrary = () => {
+        if (drawnBook) {
+            addBookToLibrary(drawnBook);
+        }
+    };
+
     return (
         <View style={randomStyles.container}>
             <View style={randomStyles.screenTitleContainer}>
@@ -55,9 +74,11 @@ export default function RandomScreen() {
             <TouchableOpacity
                 style={randomStyles.drawButton}
                 onPress={handleDraw}
-                disabled={loading || !books.length}
+                disabled={loading || !books.length || isDrawing}
             >
-                <Text style={randomStyles.drawButtonText}>Draw your book</Text>
+                <Text style={randomStyles.drawButtonText}>
+                    {isDrawing ? "Choosing..." : "Draw your book"}
+                </Text>
             </TouchableOpacity>
             <Text style={randomStyles.subText}>
                 Ready for a surprise?
@@ -69,7 +90,10 @@ export default function RandomScreen() {
                 <BookPreview isDrawing={isDrawing} finalBook={drawnBook} books={books} />
             </View>
             <View style={randomStyles.actionsWrapper}>
-                <ActionButtons />
+                <ActionButtons 
+                    onAddToLibrary={handleAddToLibrary} 
+                    disabled={!drawnBook || isDrawing} 
+                />
             </View>
 
         </View>

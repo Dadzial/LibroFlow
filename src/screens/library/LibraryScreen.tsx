@@ -43,7 +43,7 @@ export default function LibraryScreen() {
                         ))}
                     </ScrollView>
                 ) : (
-                    <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
+                    <View style={{ paddingHorizontal: 20, marginBottom: 20,alignItems:"center" }}>
                         <Text style={{ color: 'gray' }}>No favorite books yet.</Text>
                     </View>
                 )}

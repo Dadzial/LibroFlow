@@ -1,20 +1,18 @@
+import React from 'react';
 import {ScrollView, Text, View, TouchableOpacity, Dimensions} from 'react-native';
 import { libraryStyles } from "./LibraryScreen.styles";
 import MyBooks from "../../components/library/MyBooks";
-import BookPreview from "../../components/library/BookPreview";
+import { LibraryBookPreview } from "../../components/library/BookPreview";
+import { Book, useBooks } from "../../context/BooksContext";
 
 const { width } = Dimensions.get('window');
 const PADDING = 25;
 const GAP = 15;
 const CARD_WIDTH = (width - 2 * PADDING - 2 * GAP) / 3;
-const favorites = [1, 2, 3, 4, 5];
-
-const getSideSpacer = (count: number) => {
-    const totalBooksWidth = count * CARD_WIDTH + (count - 1) * GAP;
-    return Math.max((width - totalBooksWidth) / 2, 0);
-};
 
 export default function LibraryScreen() {
+    const { favoriteBooks } = useBooks();
+
     return (
         <View style={libraryStyles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -26,24 +24,29 @@ export default function LibraryScreen() {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={libraryStyles.horizontalList}
-                    style={libraryStyles.favoritesList}
-                >
-                    <View style={{ width: getSideSpacer(favorites.length) }} />
-                    {favorites.map((item, idx) => (
-                        <BookPreview
-                            key={idx}
-                            style={{
-                                width: CARD_WIDTH,
-                                marginRight: idx !== favorites.length - 1 ? GAP : 0,
-                            }}
-                        />
-                    ))}
-                    <View style={{ width: getSideSpacer(favorites.length) }} />
-                </ScrollView>
+                {favoriteBooks.length > 0 ? (
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={[libraryStyles.horizontalList, { paddingHorizontal: 20 }]}
+                        style={libraryStyles.favoritesList}
+                    >
+                        {favoriteBooks.map((item: Book, idx: number) => (
+                            <LibraryBookPreview
+                                key={item.id}
+                                book={item}
+                                style={{
+                                    width: CARD_WIDTH,
+                                    marginRight: idx !== favoriteBooks.length - 1 ? GAP : 0,
+                                }}
+                            />
+                        ))}
+                    </ScrollView>
+                ) : (
+                    <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
+                        <Text style={{ color: 'gray' }}>No favorite books yet.</Text>
+                    </View>
+                )}
 
                 <View style={libraryStyles.sectionHeader}>
                     <Text style={libraryStyles.sectionTitle}>All Books</Text>

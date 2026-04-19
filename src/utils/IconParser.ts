@@ -4,6 +4,7 @@ export const IconsParser = {
     deleteIcon: require('../../assets/delete.png'),
     seeIcon: require('../../assets/search.png'),
     addTolibIcon: require('../../assets/add-to-librar.png'),
+    favIcon: require('../../assets/fav_books_icon.png'),
 };
 
 export const getIcon = (name: keyof typeof IconsParser) => IconsParser[name];

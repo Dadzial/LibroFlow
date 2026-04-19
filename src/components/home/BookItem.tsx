@@ -1,6 +1,11 @@
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { Book } from '../../context/BooksContext';
 
-export default function BookItem({ book }: any) {
+interface BookItemProps {
+    book: Book;
+}
+
+export default function BookItem({ book }: BookItemProps) {
     return (
         <View style={styles.container}>
             <Image source={{ uri: book.cover }} style={styles.image} />

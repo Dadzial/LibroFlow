@@ -1,26 +1,40 @@
-import { FlatList ,View} from "react-native";
-import BookPreview from "./BookPreview";
-
-const data = Array(6).fill({});
+import { FlatList ,View, Text} from "react-native";
+import { LibraryBookPreview } from "./BookPreview";
+import { Book, useBooks } from "../../context/BooksContext";
 
 export default function MyBooks() {
+    const { libraryBooks, removeBookFromLibrary } = useBooks();
+
+    if (libraryBooks.length === 0) {
+        return (
+            <View style={{ alignItems: 'center', width: '100%', padding: 20 }}>
+                <Text style={{ color: 'gray' }}>Your library is empty.</Text>
+            </View>
+        );
+    }
+
     return (
-        <View style={{ alignItems: 'center', width: '100%' }}>
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <FlatList
-                data={data}
+                data={libraryBooks}
                 numColumns={3}
                 scrollEnabled={false}
-                keyExtractor={(_, i) => i.toString()}
+                keyExtractor={(item: Book) => item.id.toString()}
                 columnWrapperStyle={{
-                    justifyContent: 'center',
-                    gap: 10,
+                    justifyContent: 'flex-start',
+                    gap: 15,
                     marginBottom: 25
                 }}
                 contentContainerStyle={{
                     paddingVertical: 10,
-                    paddingHorizontal: 20,
                 }}
-                renderItem={() => <BookPreview />}
+                renderItem={({ item }: { item: Book }) => (
+                    <LibraryBookPreview
+                        book={item}
+                        onRemove={removeBookFromLibrary}
+                        style={{ marginRight: 0 }}
+                    />
+                )}
             />
         </View>
     );

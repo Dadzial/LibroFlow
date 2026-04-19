@@ -2,8 +2,13 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import BookItem from './BookItem';
 import { TouchableOpacity } from 'react-native';
 import {getColor} from "../../utils/ColorsParser";
+import { Book } from '../../context/BooksContext';
 
-export default function BooksCarousel({ books }: any) {
+interface BooksCarouselProps {
+    books: Book[];
+}
+
+export default function BooksCarousel({ books }: BooksCarouselProps) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -18,7 +23,7 @@ export default function BooksCarousel({ books }: any) {
                             justifyContent: 'center',
                             flexGrow: 1,
                         }}>
-                {books.map((book: any) => (
+                {books.map((book: Book) => (
                     <BookItem key={book.id} book={book} />
                 ))}
             </ScrollView>

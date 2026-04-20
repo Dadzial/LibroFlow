@@ -4,8 +4,8 @@ import SearchBar from "../../components/search/SearchBar"
 import QuickFilters from "../../components/search/QuickFilters";
 import NewBooks from "../../components/search/NewBooks";
 import AllBooks from "../../components/search/AllBooks";
-import {useEffect, useState} from "react";
-import {fetchAllBooks} from "../../api/FetchAllBooks";
+import {useState} from "react";
+
 
 const MAIN_CATEGORIES = [
     'Fantasy',

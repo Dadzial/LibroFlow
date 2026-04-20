@@ -15,7 +15,7 @@ export default function BookDisplayScreen() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const addToLibIcon = getIcon('addTolibIcon');
-    const { addBookToLibrary } = useBooks();
+    const { addBookToLibrary, setCurrentlyReadingBook } = useBooks();
 
     useEffect(() => {
         const loadBook = async () => {
@@ -55,6 +55,14 @@ export default function BookDisplayScreen() {
         if (book) {
             addBookToLibrary(book);
             navigation.goBack();
+        }
+    };
+
+    const handleStartReading = () => {
+        if (book) {
+            setCurrentlyReadingBook(book);
+            // @ts-ignore
+            navigation.navigate('Main', { screen: 'Home' });
         }
     };
 
@@ -102,7 +110,7 @@ export default function BookDisplayScreen() {
             </ScrollView>
 
             <View style={bookDisplayScreenStyles.bookActions}>
-                <TouchableOpacity style={bookDisplayScreenStyles.startReadButton} onPress={() => {}}>
+                <TouchableOpacity style={bookDisplayScreenStyles.startReadButton} onPress={handleStartReading}>
                     <Text style={bookDisplayScreenStyles.actionButtonText}>Start Reading</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={bookDisplayScreenStyles.addToLibButton} onPress={handleAddToLibrary}>

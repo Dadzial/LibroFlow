@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export interface Book {
     id: string | number;
@@ -8,18 +8,26 @@ export interface Book {
     pageCount?: number;
     language?: string;
     description?: string;
+    progress?: number;
 }
 
 export interface BooksContextType {
     libraryBooks: Book[];
     favoriteBooks: Book[];
+    toReadBooks: Book[];
     trashBooks: Book[];
+    currentlyReadingBook: Book | null;
+    readingTime: number;
+    isReading: boolean;
     addBookToLibrary: (book: Book) => void;
     removeBookFromLibrary: (bookId: string | number) => void;
     toggleFavorite: (bookId: string | number) => void;
+    toggleToRead: (bookId: string | number) => void;
     restoreFromTrash: (bookId: string | number) => void;
     permanentDeleteFromTrash: (bookId: string | number) => void;
     clearTrash: () => void;
+    setCurrentlyReadingBook: (book: Book | null) => void;
+    setIsReading: (isReading: boolean) => void;
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
@@ -28,6 +36,22 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     const [libraryBooks, setLibraryBooks] = useState<Book[]>([]);
     const [trashBooks, setTrashBooks] = useState<Book[]>([]);
     const [favoriteIds, setFavoriteIds] = useState<(string | number)[]>([]);
+    const [toReadIds, setToReadIds] = useState<(string | number)[]>([]);
+    const [currentlyReadingBook, setCurrentlyReadingBook] = useState<Book | null>(null);
+    const [readingTime, setReadingTime] = useState(0);
+    const [isReading, setIsReading] = useState(false);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (isReading) {
+            interval = setInterval(() => {
+                setReadingTime((prev) => prev + 1);
+            }, 1000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isReading]);
 
     const addBookToLibrary = (book: Book) => {
         setLibraryBooks((prev) => {
@@ -42,6 +66,11 @@ export function BooksProvider({ children }: { children: ReactNode }) {
         if (bookToRemove) {
             setLibraryBooks((prev) => prev.filter((b) => b.id !== bookId));
             setFavoriteIds((prev) => prev.filter((id) => id !== bookId));
+            setToReadIds((prev) => prev.filter((id) => id !== bookId));
+            if (currentlyReadingBook?.id === bookId) {
+                setCurrentlyReadingBook(null);
+                setIsReading(false);
+            }
             setTrashBooks((prev) => [...prev, bookToRemove]);
         }
     };
@@ -70,19 +99,35 @@ export function BooksProvider({ children }: { children: ReactNode }) {
         );
     };
 
+    const toggleToRead = (bookId: string | number) => {
+        setToReadIds((prev) => 
+            prev.includes(bookId) 
+                ? prev.filter(id => id !== bookId) 
+                : [...prev, bookId]
+        );
+    };
+
     const favoriteBooks = libraryBooks.filter(book => favoriteIds.includes(book.id));
+    const toReadBooks = libraryBooks.filter(book => toReadIds.includes(book.id));
 
     return (
         <BooksContext.Provider value={{ 
             libraryBooks, 
             favoriteBooks, 
+            toReadBooks,
             trashBooks,
+            currentlyReadingBook,
+            readingTime,
+            isReading,
             addBookToLibrary, 
             removeBookFromLibrary, 
             toggleFavorite,
+            toggleToRead,
             restoreFromTrash,
             permanentDeleteFromTrash,
-            clearTrash
+            clearTrash,
+            setCurrentlyReadingBook,
+            setIsReading
         }}>
             {children}
         </BooksContext.Provider>

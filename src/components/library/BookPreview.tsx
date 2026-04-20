@@ -2,6 +2,9 @@ import React from "react";
 import { View, Text, Image, ViewStyle, TouchableOpacity, StyleSheet } from "react-native";
 import { Book, useBooks } from "../../context/BooksContext";
 import { getIcon } from "../../utils/IconParser";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/RootNavigator";
 
 export interface LibraryBookPreviewProps {
     style?: ViewStyle;
@@ -10,20 +13,29 @@ export interface LibraryBookPreviewProps {
 }
 
 export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, book, onRemove }) => {
-    const { toggleFavorite, favoriteBooks } = useBooks();
+    const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks } = useBooks();
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const isFavorite = favoriteBooks.some((b: Book) => b.id === book.id);
+    const isToRead = toReadBooks.some((b: Book) => b.id === book.id);
     const deleteIcon = getIcon('deleteIcon');
     const heartIcon = getIcon('favIcon'); 
+    const toReadIcon = getIcon('toReadIcon');
 
     if (!book) return null;
+
+    const handleBookPress = () => {
+        navigation.navigate('BookDisplay', { bookId: book.id.toString() });
+    };
 
     return (
         <View style={[styles.container, style]}>
             <View>
-                <Image
-                    source={{ uri: book.cover }}
-                    style={styles.cover}
-                />
+                <TouchableOpacity activeOpacity={0.9} onPress={handleBookPress}>
+                    <Image
+                        source={{ uri: book.cover }}
+                        style={styles.cover}
+                    />
+                </TouchableOpacity>
                 <View style={styles.actionsContainer}>
                     {onRemove && (
                         <TouchableOpacity
@@ -38,6 +50,12 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
                         onPress={() => toggleFavorite(book.id)}
                     >
                         <Image source={heartIcon} style={[styles.icon, {tintColor: isFavorite ? '#FFF' : '#666'}]} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.actionButton, isToRead && styles.toReadActive]}
+                        onPress={() => toggleToRead(book.id)}
+                    >
+                        <Image source={toReadIcon} style={[styles.icon, {tintColor: isToRead ? '#FFF' : '#666'}]} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -93,6 +111,9 @@ const styles = StyleSheet.create({
     },
     favoriteActive: {
         backgroundColor: '#EC4899', 
+    },
+    toReadActive: {
+        backgroundColor: '#3B82F6', 
     },
     icon: {
         width: 18,

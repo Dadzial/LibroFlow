@@ -11,11 +11,18 @@ const GAP = 15;
 const CARD_WIDTH = (width - 2 * PADDING - 2 * GAP) / 3;
 
 export default function LibraryScreen() {
-    const { favoriteBooks } = useBooks();
+    const { favoriteBooks, removeBookFromLibrary } = useBooks();
 
     return (
         <View style={libraryStyles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
+
+                <View style={libraryStyles.screenTitleContainer}>
+                    <Text style={libraryStyles.screenTitle}>Library</Text>
+                    <Text style={libraryStyles.screenDescription}>
+                        Your personal collection of books. Keep track of what you've read and what you love.
+                    </Text>
+                </View>
 
                 <View style={libraryStyles.sectionHeader}>
                     <Text style={libraryStyles.sectionTitle}>Favorites</Text>
@@ -35,6 +42,7 @@ export default function LibraryScreen() {
                             <LibraryBookPreview
                                 key={item.id}
                                 book={item}
+                                onRemove={removeBookFromLibrary}
                                 style={{
                                     width: CARD_WIDTH,
                                     marginRight: idx !== favoriteBooks.length - 1 ? GAP : 0,

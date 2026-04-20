@@ -13,15 +13,20 @@ export interface Book {
 export interface BooksContextType {
     libraryBooks: Book[];
     favoriteBooks: Book[];
+    trashBooks: Book[];
     addBookToLibrary: (book: Book) => void;
     removeBookFromLibrary: (bookId: string | number) => void;
     toggleFavorite: (bookId: string | number) => void;
+    restoreFromTrash: (bookId: string | number) => void;
+    permanentDeleteFromTrash: (bookId: string | number) => void;
+    clearTrash: () => void;
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
 
 export function BooksProvider({ children }: { children: ReactNode }) {
     const [libraryBooks, setLibraryBooks] = useState<Book[]>([]);
+    const [trashBooks, setTrashBooks] = useState<Book[]>([]);
     const [favoriteIds, setFavoriteIds] = useState<(string | number)[]>([]);
 
     const addBookToLibrary = (book: Book) => {
@@ -33,8 +38,28 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     };
 
     const removeBookFromLibrary = (bookId: string | number) => {
-        setLibraryBooks((prev) => prev.filter((b) => b.id !== bookId));
-        setFavoriteIds((prev) => prev.filter((id) => id !== bookId));
+        const bookToRemove = libraryBooks.find(b => b.id === bookId);
+        if (bookToRemove) {
+            setLibraryBooks((prev) => prev.filter((b) => b.id !== bookId));
+            setFavoriteIds((prev) => prev.filter((id) => id !== bookId));
+            setTrashBooks((prev) => [...prev, bookToRemove]);
+        }
+    };
+
+    const restoreFromTrash = (bookId: string | number) => {
+        const bookToRestore = trashBooks.find(b => b.id === bookId);
+        if (bookToRestore) {
+            setTrashBooks((prev) => prev.filter(b => b.id !== bookId));
+            setLibraryBooks((prev) => [...prev, bookToRestore]);
+        }
+    };
+
+    const permanentDeleteFromTrash = (bookId: string | number) => {
+        setTrashBooks((prev) => prev.filter(b => b.id !== bookId));
+    };
+
+    const clearTrash = () => {
+        setTrashBooks([]);
     };
 
     const toggleFavorite = (bookId: string | number) => {
@@ -51,9 +76,13 @@ export function BooksProvider({ children }: { children: ReactNode }) {
         <BooksContext.Provider value={{ 
             libraryBooks, 
             favoriteBooks, 
+            trashBooks,
             addBookToLibrary, 
             removeBookFromLibrary, 
-            toggleFavorite 
+            toggleFavorite,
+            restoreFromTrash,
+            permanentDeleteFromTrash,
+            clearTrash
         }}>
             {children}
         </BooksContext.Provider>

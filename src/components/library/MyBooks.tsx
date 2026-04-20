@@ -3,12 +3,16 @@ import { LibraryBookPreview } from "./BookPreview";
 import { Book, useBooks } from "../../context/BooksContext";
 
 export default function MyBooks() {
-    const { libraryBooks, removeBookFromLibrary } = useBooks();
+    const { libraryBooks, favoriteBooks, removeBookFromLibrary } = useBooks();
 
-    if (libraryBooks.length === 0) {
+    const filteredBooks = libraryBooks.filter(
+        book => !favoriteBooks.some(fav => fav.id === book.id)
+    );
+
+    if (filteredBooks.length === 0) {
         return (
             <View style={{ alignItems: 'center', width: '100%', padding: 20 }}>
-                <Text style={{ color: 'gray' }}>Your library is empty.</Text>
+                <Text style={{ color: 'gray' }}>No other books in your library.</Text>
             </View>
         );
     }
@@ -16,7 +20,7 @@ export default function MyBooks() {
     return (
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <FlatList
-                data={libraryBooks}
+                data={filteredBooks}
                 numColumns={3}
                 scrollEnabled={false}
                 keyExtractor={(item: Book) => item.id.toString()}

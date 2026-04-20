@@ -31,6 +31,7 @@ export const trashStyles = StyleSheet.create({
         paddingVertical: 10,
     },
     trashListContainer: {
-        marginTop:10
+        marginTop: 10,
+        flex: 1,
     }
 });

@@ -17,8 +17,10 @@ export default function BookPreview({ isDrawing, finalBook, books }: BookPreview
                 setCurrentIndex(Math.floor(Math.random() * books.length));
             }, 100);
         } else if (finalBook && books.length > 0) {
-            const index = books.findIndex(b => b.googleId === finalBook.googleId || b.title === finalBook.title);
-            setCurrentIndex(index >= 0 ? index : 0);
+            const index = books.findIndex(b => b.id === finalBook.id);
+            if (index >= 0) {
+                setCurrentIndex(index);
+            }
         }
         return () => clearInterval(interval);
     }, [isDrawing, finalBook, books]);

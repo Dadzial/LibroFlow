@@ -7,14 +7,16 @@ import BookPreview from '../../components/random/BookPreview';
 import ActionButtons from '../../components/random/ActionButtons';
 import { fetchAllBooks } from '../../api/FetchAllBooks';
 import { useBooks, Book } from '../../context/BooksContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function RandomScreen() {
+    const navigation = useNavigation();
     const [animateDice, setAnimateDice] = useState(false);
     const [isDrawing, setIsDrawing] = useState(false);
     const [drawnBook, setDrawnBook] = useState<Book | null>(null);
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
-    const { addBookToLibrary } = useBooks();
+    const { addBookToLibrary, setCurrentlyReadingBook } = useBooks();
 
     useEffect(() => {
         const loadBooks = async () => {
@@ -60,6 +62,14 @@ export default function RandomScreen() {
         }
     };
 
+    const handleStartReading = () => {
+        if (drawnBook) {
+            setCurrentlyReadingBook(drawnBook);
+            // @ts-ignore
+            navigation.navigate('Main', { screen: 'Home' });
+        }
+    };
+
     return (
         <View style={randomStyles.container}>
             <View style={randomStyles.screenTitleContainer}>
@@ -92,6 +102,7 @@ export default function RandomScreen() {
             <View style={randomStyles.actionsWrapper}>
                 <ActionButtons 
                     onAddToLibrary={handleAddToLibrary} 
+                    onStartReading={handleStartReading}
                     disabled={!drawnBook || isDrawing} 
                 />
             </View>

@@ -26,9 +26,6 @@ export default function LibraryScreen() {
 
                 <View style={libraryStyles.sectionHeader}>
                     <Text style={libraryStyles.sectionTitle}>Favorites</Text>
-                    <TouchableOpacity onPress={() => console.log('Favorites - View all')}>
-                        <Text style={libraryStyles.viewAll}>View all</Text>
-                    </TouchableOpacity>
                 </View>
 
                 {favoriteBooks.length > 0 ? (
@@ -58,9 +55,6 @@ export default function LibraryScreen() {
 
                 <View style={libraryStyles.sectionHeader}>
                     <Text style={libraryStyles.sectionTitle}>All Books</Text>
-                    <TouchableOpacity onPress={() => console.log('All Books - View all')}>
-                        <Text style={libraryStyles.viewAll}>View all</Text>
-                    </TouchableOpacity>
                 </View>
 
                 <View style={libraryStyles.section}>

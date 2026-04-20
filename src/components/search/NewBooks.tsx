@@ -90,9 +90,6 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>New Books</Text>
-                <TouchableOpacity>
-                    <Text style={styles.viewAll}>View all</Text>
-                </TouchableOpacity>
             </View>
 
             {isLoading ? (

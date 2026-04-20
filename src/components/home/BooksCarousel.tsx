@@ -17,9 +17,6 @@ export default function BooksCarousel({ books, onRemove }: BooksCarouselProps) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>Books to read</Text>
-                <TouchableOpacity onPress={() => console.log('View all clicked')}>
-                    <Text style={styles.seeMore}>View all</Text>
-                </TouchableOpacity>
             </View>
 
             <Animated.FlatList

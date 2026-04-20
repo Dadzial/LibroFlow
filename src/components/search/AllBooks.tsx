@@ -76,9 +76,6 @@ export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>All Books</Text>
-                <TouchableOpacity>
-                    <Text style={styles.viewAll}>View all</Text>
-                </TouchableOpacity>
             </View>
 
             {isLoading ? (

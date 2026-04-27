@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import { randomStyles } from "./RandomScreen.styles";
 
-import Dice from '../../components/random/Dice';
-import BookPreview from '../../components/random/BookPreview';
-import ActionButtons from '../../components/random/ActionButtons';
+import Dice from '../../components/lotto/Dice';
+import BookPreview from '../../components/lotto/BookPreview';
+import ActionButtons from '../../components/lotto/ActionButtons';
 import { fetchAllBooks } from '../../api/FetchAllBooks';
 import { useBooks, Book } from '../../context/BooksContext';
 import { useNavigation } from '@react-navigation/native';

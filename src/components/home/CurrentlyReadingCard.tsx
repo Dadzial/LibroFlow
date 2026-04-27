@@ -3,7 +3,7 @@ import { useBooks } from '../../context/BooksContext';
 import { getColor } from '../../utils/ColorsParser';
 
 export default function CurrentlyReadingCard() {
-    const { currentlyReadingBook, readingTime, isReading, setIsReading } = useBooks();
+    const { currentlyReadingBook, readingTime, isReading, setIsReading, setCurrentlyReadingBook } = useBooks();
 
     if (!currentlyReadingBook) {
         return (
@@ -22,13 +22,23 @@ export default function CurrentlyReadingCard() {
 
     const progress = currentlyReadingBook.progress || 0;
 
+    const handleRemoveCurrent = () => {
+        setCurrentlyReadingBook(null);
+        setIsReading(false);
+    };
+
     return (
         <View style={styles.card}>
             <Image source={{ uri: currentlyReadingBook.cover }} style={styles.cover} />
 
             <View style={styles.content}>
                 <View>
-                    <Text style={styles.author}>{currentlyReadingBook.author}</Text>
+                    <View style={styles.headerRow}>
+                        <Text style={styles.author}>{currentlyReadingBook.author}</Text>
+                        <TouchableOpacity style={styles.deleteButton} onPress={handleRemoveCurrent}>
+                            <Text style={styles.deleteButtonText}>✕</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text style={styles.title} numberOfLines={1}>{currentlyReadingBook.title}</Text>
                 </View>
 
@@ -90,6 +100,28 @@ const styles = StyleSheet.create({
     author: {
         fontSize: 14,
         color: '#666',
+        flex: 1,
+    },
+    headerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    deleteButton: {
+        backgroundColor: '#FEE2E2',
+        borderRadius: 12,
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    deleteButtonText: {
+        color: '#EF4444',
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        lineHeight: 24,
+        includeFontPadding: false,
     },
     title: {
         fontSize: 18,

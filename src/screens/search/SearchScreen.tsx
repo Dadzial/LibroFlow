@@ -37,11 +37,14 @@ export default function SearchScreen() {
                     categories={MAIN_CATEGORIES}
                 />
             </View>
-            <View style={searchStyles.newBooksContainer}>
-                <NewBooks activeCategory={activeCategory} searchText={searchText} />
-            </View>
-            <View style={searchStyles.allBooksContainer}>
-                <AllBooks activeCategory={activeCategory} searchText={searchText} />
+            
+            <View style={{ flex: 1, justifyContent: 'space-around' }}>
+                <View style={searchStyles.newBooksContainer}>
+                    <NewBooks activeCategory={activeCategory} searchText={searchText} />
+                </View>
+                <View style={searchStyles.allBooksContainer}>
+                    <AllBooks activeCategory={activeCategory} searchText={searchText} />
+                </View>
             </View>
         </View>
     );

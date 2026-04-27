@@ -4,7 +4,7 @@ export const GoogleBooksAPI = {
 
     search: async (query: string) => {
         const res = await fetch(
-            `${config.googleBooksUrl}/volumes?q=${encodeURIComponent(query)}&key=${config.googlApiKey}&maxResults=20`
+            `${config.googleBooksUrl}/volumes?q=${encodeURIComponent(query)}&key=${config.googlApiKey}&maxResults=40`
         )
         const data = await res.json()
 

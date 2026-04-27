@@ -8,11 +8,19 @@ interface Book {
     description: string;
     pageCount: number;
     language : string;
+    categories?: string[];
+    publishedDate?: string;
+    createdAt?: string;
 }
 
-export const fetchAllBooks = async (status: string) => {
+export const fetchAllBooks = async (status: string, category?: string | null) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/books/all?status=${status}`);
+        let url = `${API_BASE_URL}/api/books/all?status=${status}`;
+        if (category) {
+            url += `&category=${encodeURIComponent(category)}`;
+        }
+        
+        const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error(`Error fetching books: ${response.statusText}`);

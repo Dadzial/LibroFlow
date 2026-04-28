@@ -7,12 +7,14 @@ interface Book {
     cover: string;
     description: string;
     pageCount: number;
-    language : string;
+    language: string;
 }
 
 export const fetchAllBooks = async (status: string) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/books/all?status=${status}`);
+        const response = await fetch(
+            `${API_BASE_URL}/api/books/all?status=${encodeURIComponent(status)}`
+        );
 
         if (!response.ok) {
             throw new Error(`Error fetching books: ${response.statusText}`);

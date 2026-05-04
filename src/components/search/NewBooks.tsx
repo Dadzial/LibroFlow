@@ -17,14 +17,14 @@ type NewBook = {
 }
 
 type AllBooksProps = {
-    activeCategory:string | null
-    searchText:string
+    activeCategories: string[]
+    searchText: string
 }
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 50 - 30) / 3;
 
-export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
+export default function NewBooks({activeCategories, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
     const [newBooks, setNewBooks] = useState<NewBook[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +37,7 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
         const loadBooks = async () => {
             setIsLoading(true);
             try {
-                const fetchedBooks: any[] = await fetchAllBooks('none', activeCategory);
+                const fetchedBooks: any[] = await fetchAllBooks('none', activeCategories);
 
                 const threeYearsAgo = new Date();
                 threeYearsAgo.setMonth(threeYearsAgo.getMonth() - 36);
@@ -57,7 +57,7 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
             }
         };
         loadBooks();
-    }, [activeCategory]);
+    }, [activeCategories]);
 
     const filteredBooks = newBooks.filter(book =>
         book.title.toLowerCase().includes(searchText.toLowerCase()) ||

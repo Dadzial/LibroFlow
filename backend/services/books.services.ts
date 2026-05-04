@@ -55,9 +55,10 @@ export const AllBooksService = {
 
     getAll: (status?: string, category?: string) => {
         let query: any = {};
-        if (status) query.status = status;
+        if (status && status !== 'none') query.status = status;
         if (category) {
-            query.categories = { $in: [new RegExp(category, 'i')] };
+            const categories = category.split(',');
+            query.categories = { $in: categories.map(cat => new RegExp(cat, 'i')) };
         }
         return Book.find(query);
     },

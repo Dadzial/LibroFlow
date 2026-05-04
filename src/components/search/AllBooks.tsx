@@ -15,14 +15,14 @@ type Book = {
 }
 
 type AllBooksProps = {
-    activeCategory:string | null
-    searchText:string
+    activeCategories: string[]
+    searchText: string
 }
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 50 - 30) / 3;
 
-export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
+export default function AllBooks({activeCategories, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
     const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +36,7 @@ export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
         const loadBooks = async () => {
             setIsLoading(true);
             try {
-                const fetchedBooks = await fetchAllBooks('none', activeCategory);
+                const fetchedBooks: any[] = await fetchAllBooks('none', activeCategories);
                 setBooks(fetchedBooks);
             } catch (error) {
                 console.error("Error in books load:", error);
@@ -45,7 +45,7 @@ export default function AllBooks({activeCategory, searchText}: AllBooksProps) {
             }
         };
         loadBooks();
-    }, [activeCategory]);
+    }, [activeCategories]);
 
     const filteredBooks = books.filter(book =>
         book.title.toLowerCase().includes(searchText.toLowerCase()) ||

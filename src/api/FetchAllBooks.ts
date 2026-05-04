@@ -13,11 +13,11 @@ interface Book {
     createdAt?: string;
 }
 
-export const fetchAllBooks = async (status: string, category?: string | null) => {
+export const fetchAllBooks = async (status: string, categories?: string[] | null) => {
     try {
         let url = `${API_BASE_URL}/api/books/all?status=${status}`;
-        if (category) {
-            url += `&category=${encodeURIComponent(category)}`;
+        if (categories && categories.length > 0) {
+            url += `&category=${encodeURIComponent(categories.join(','))}`;
         }
         
         const response = await fetch(url);

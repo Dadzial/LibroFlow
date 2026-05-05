@@ -1,15 +1,28 @@
 import React from 'react';
-import { Text, StyleSheet, Image, Platform, StatusBar, View } from 'react-native';
+import { Text, StyleSheet, Image, Platform, StatusBar, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getIcon } from '../../utils/IconParser';
-import {getColor} from "../../utils/ColorsParser";
+import { Colors } from '../../utils/ColorsParser';
+import { useTheme } from '../../context/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Header() {
+    const { isDark, toggleTheme, themeColors } = useTheme();
+
     return (
-        <SafeAreaView style={stylesHeader.container} edges={['top']}>
+        <SafeAreaView style={[stylesHeader.container, { backgroundColor: themeColors.secondColor }]} edges={['top']}>
             <View style={stylesHeader.contentWrapper}>
-                <Image source={getIcon('headerIcon')} style={stylesHeader.logo} />
-                <Text style={stylesHeader.title}>LibroFlow</Text>
+                <View style={stylesHeader.leftSection}>
+                    <Image source={getIcon('headerIcon')} style={stylesHeader.logo} />
+                    <Text style={[stylesHeader.title, { color: themeColors.accent }]}>LibroFlow</Text>
+                </View>
+                <TouchableOpacity onPress={toggleTheme} style={stylesHeader.themeButton}>
+                    <Ionicons
+                        name={isDark ? "sunny" : "moon"}
+                        size={24}
+                        color={themeColors.accent}
+                    />
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -20,7 +33,6 @@ const stylesHeader = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight! - 10 : 1,
         paddingHorizontal: 16,
         paddingVertical: 12,
-        backgroundColor: getColor('secondColor'),
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -30,7 +42,11 @@ const stylesHeader = StyleSheet.create({
     contentWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
+    },
+    leftSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     logo: {
         width: 40,
@@ -41,6 +57,8 @@ const stylesHeader = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#6A28B0',
+    },
+    themeButton: {
+        padding: 8,
     },
 });

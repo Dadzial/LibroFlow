@@ -5,6 +5,7 @@ import QuickFilters from "../../components/search/QuickFilters";
 import NewBooks from "../../components/search/NewBooks";
 import AllBooks from "../../components/search/AllBooks";
 import {useState} from "react";
+import { useTheme } from '../../context/ThemeContext';
 
 
 const MAIN_CATEGORIES = [
@@ -21,11 +22,12 @@ const MAIN_CATEGORIES = [
 export default function SearchScreen() {
     const [activeCategories, setActiveCategories] = useState<string[]>([]);
     const [searchText, setSearchText] = useState('');
+    const { themeColors } = useTheme();
 
     return (
-        <View style={searchStyles.mainContainer}>
+        <View style={[searchStyles.mainContainer, { backgroundColor: themeColors.primaryColor }]}>
             <View style={searchStyles.screenTitleContainer}>
-                <Text style={searchStyles.screenTitle}>Search</Text>
+                <Text style={[searchStyles.screenTitle, { color: themeColors.textPrimaryColor }]}>Search</Text>
             </View>
             <View style={searchStyles.searchBarContainer}>
                 <SearchBar searchText={searchText} onSearch={setSearchText} />

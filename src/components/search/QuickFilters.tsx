@@ -1,5 +1,6 @@
 import {StyleSheet, View, FlatList,TouchableOpacity,Text} from 'react-native';
 import {getColor} from "../../utils/ColorsParser";
+import { useTheme } from '../../context/ThemeContext';
 
 type QuickFiltersProps = {
     activeCategories: string[];
@@ -8,6 +9,8 @@ type QuickFiltersProps = {
 }
 
 export default function QuickFilters({activeCategories, onCategoriesChange, categories}: QuickFiltersProps) {
+    const { themeColors } = useTheme();
+
     const handleClearFilters = () => {
         onCategoriesChange([]);
     }
@@ -23,9 +26,9 @@ export default function QuickFilters({activeCategories, onCategoriesChange, cate
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Quick Filters</Text>
+                <Text style={[styles.headerTitle, { color: themeColors.textPrimaryColor }]}>Quick Filters</Text>
                 <TouchableOpacity onPress={handleClearFilters}>
-                    <Text style={styles.clearFilters}>Clear Filters</Text>
+                    <Text style={[styles.clearFilters, { color: themeColors.accent }]}>Clear Filters</Text>
                 </TouchableOpacity>
             </View>
             <FlatList
@@ -37,13 +40,15 @@ export default function QuickFilters({activeCategories, onCategoriesChange, cate
                     <TouchableOpacity
                         style={[
                             styles.filterButton,
-                            activeCategories.includes(item) && styles.filterButtonActive
+                            { backgroundColor: themeColors.secondColor },
+                            activeCategories.includes(item) && { backgroundColor: themeColors.accent }
                         ]}
                         onPress={() => toggleCategory(item)}
                     >
                         <Text style={[
                             styles.filterText,
-                            activeCategories.includes(item) && styles.filterTextActive
+                            { color: themeColors.textPrimaryColor },
+                            activeCategories.includes(item) && { color: themeColors.primaryColor }
                         ]}>
                             {item}
                         </Text>
@@ -67,33 +72,23 @@ const styles = StyleSheet.create({
     headerTitle:{
         fontSize: 15,
         fontWeight: 'bold',
-        color: getColor('textPrimaryColor'),
     },
     clearFilters:{
         fontSize: 15,
         fontWeight: 'bold',
-        color: getColor('accent'),
     },
     filterButton: {
         flex: 1,
         height: 35,
         margin: 3,
         borderRadius: 20,
-        backgroundColor: getColor('secondColor'),
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 1,
     },
-    filterButtonActive: {
-        backgroundColor: getColor('accent'),
-    },
     filterText: {
         fontSize: 14,
         fontWeight: '600',
-        color: getColor('textPrimaryColor'),
         textAlign: 'center',
-    },
-    filterTextActive: {
-        color: getColor('primaryColor'),
     },
 })

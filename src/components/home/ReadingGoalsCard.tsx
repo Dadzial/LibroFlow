@@ -1,16 +1,18 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function ReadingGoalsCard() {
+    const { themeColors } = useTheme();
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: themeColors.secondColor }]}>
             <View style={styles.row}>
-                <View style={styles.circle}>
-                    <Text style={styles.percent}>0%</Text>
+                <View style={[styles.circle, { borderColor: themeColors.primaryColor }]}>
+                    <Text style={[styles.percent, { color: themeColors.textPrimaryColor }]}>0%</Text>
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={styles.goalText}>0 of 1 books read</Text>
-                    <Text style={styles.subText}>
+                    <Text style={[styles.goalText, { color: themeColors.textPrimaryColor }]}>0 of 1 books read</Text>
+                    <Text style={[styles.subText, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>
                         You're just starting your journey. Pick a book and start reading!
                     </Text>
                 </View>
@@ -21,7 +23,6 @@ export default function ReadingGoalsCard() {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#fff',
         borderRadius: 16,
         padding: 20,
         marginBottom: 20,
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 40,
         borderWidth: 6,
-        borderColor: '#ddd',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -64,12 +64,10 @@ const styles = StyleSheet.create({
 
     goalText: {
         fontWeight: 'bold',
-        color: '#6A28B0',
     },
 
     subText: {
         fontSize: 12,
-        color: '#666',
         marginTop: 5,
         lineHeight: 16,
     },

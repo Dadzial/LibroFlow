@@ -5,6 +5,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {RootStackParamList} from "../../navigation/RootNavigator";
+import { useTheme } from '../../context/ThemeContext';
 
 type Book = {
     googleId?: string;
@@ -24,6 +25,7 @@ const CARD_WIDTH = (width - 50 - 30) / 3;
 
 export default function AllBooks({activeCategories, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
+    const { themeColors } = useTheme();
     const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [contentWidth, setContentWidth] = useState(1);
@@ -66,27 +68,27 @@ export default function AllBooks({activeCategories, searchText}: AllBooksProps) 
         >
             <Image
                 source={{ uri: item.cover }}
-                style={styles.bookCover}
+                style={[styles.bookCover, { backgroundColor: themeColors.secondColor }]}
                 resizeMode="cover"
             />
-            <Text style={styles.bookTitle} numberOfLines={1}>{item.title}</Text>
-            <Text style={styles.bookAuthor} numberOfLines={1}>{item.author}</Text>
+            <Text style={[styles.bookTitle, { color: themeColors.textPrimaryColor }]} numberOfLines={1}>{item.title}</Text>
+            <Text style={[styles.bookAuthor, { color: themeColors.scrollbarColor }]} numberOfLines={1}>{item.author}</Text>
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>All Books</Text>
+                <Text style={[styles.headerTitle, { color: themeColors.textPrimaryColor }]}>All Books</Text>
             </View>
 
             {isLoading ? (
                 <View style={{ height: 180, justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color={getColor('primaryColor' as any)} />
+                    <ActivityIndicator size="large" color={themeColors.accent} />
                 </View>
             ) : filteredBooks.length === 0 ? (
                 <View style={{ height: 180, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: 'gray' }}>No books found</Text>
+                    <Text style={{ color: themeColors.textPrimaryColor, opacity: 0.6 }}>No books found</Text>
                 </View>
             ) : (
                 <View>
@@ -107,7 +109,7 @@ export default function AllBooks({activeCategories, searchText}: AllBooksProps) 
                     />
 
                     <View 
-                        style={styles.customScrollbarBg}
+                        style={[styles.customScrollbarBg, { backgroundColor: themeColors.secondColor }]}
                         onLayout={(e) => setScrollbarWidth(e.nativeEvent.layout.width)}
                     >
                         <Animated.View
@@ -115,7 +117,8 @@ export default function AllBooks({activeCategories, searchText}: AllBooksProps) 
                                 styles.customScrollbarIndicator,
                                 {
                                     width: indicatorWidth,
-                                    transform: [{ translateX }]
+                                    transform: [{ translateX }],
+                                    backgroundColor: themeColors.scrollbarColor
                                 }
                             ]}
                         />

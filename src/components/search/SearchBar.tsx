@@ -1,6 +1,7 @@
-import {StyleSheet, View, TextInput,Image} from 'react-native';
+import {StyleSheet, View, TextInput, Image} from 'react-native';
 import {getColor} from "../../utils/ColorsParser";
 import {getIcon} from "../../utils/IconParser";
+import { useTheme } from '../../context/ThemeContext';
 
 interface SearchBarProps {
     searchText: string;
@@ -8,13 +9,14 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ searchText, onSearch }: SearchBarProps) {
+    const { themeColors } = useTheme();
     return (
-        <View style={styles.searchBarContainer}>
-            <Image source={getIcon('seeIcon')} style={styles.icon} />
+        <View style={[styles.searchBarContainer, { backgroundColor: themeColors.secondColor }]}>
+            <Image source={getIcon('seeIcon')} style={[styles.icon, { tintColor: themeColors.textPrimaryColor }]} />
             <TextInput
-                style={styles.input}
+                style={[styles.input, { color: themeColors.textPrimaryColor }]}
                 placeholder="What do you want to read ..."
-                placeholderTextColor={getColor('scrollbarColor')}
+                placeholderTextColor={themeColors.scrollbarColor}
                 value={searchText}
                 onChangeText={onSearch}
             />
@@ -27,12 +29,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 45,
         alignItems: 'center',
-        backgroundColor: getColor('secondColor'),
         borderRadius: 20,
         marginHorizontal: 15,
         paddingHorizontal: 10,
         elevation: 25,
-
     },
     icon: {
         width: 20,
@@ -43,6 +43,5 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 16,
-        color: getColor('textPrimaryColor'),
     },
 })

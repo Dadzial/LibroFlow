@@ -3,16 +3,22 @@ import { LibraryBookPreview } from "./BookPreview";
 import { Book, useBooks } from "../../context/BooksContext";
 
 export default function MyBooks() {
-    const { libraryBooks, favoriteBooks, removeBookFromLibrary } = useBooks();
+    const { libraryBooks, favoriteBooks, ratedBooks, removeBookFromLibrary } = useBooks() as any;
 
-    const filteredBooks = libraryBooks.filter(
-        book => !favoriteBooks.some(fav => fav.id === book.id)
+    const allBooks = Array.from(
+        new Map(
+            [
+                ...libraryBooks,
+                ...favoriteBooks.filter((fav: Book) => !libraryBooks.some((lib: Book) => lib.id === fav.id)),
+                ...ratedBooks.filter((rated: Book) => !libraryBooks.some((lib: Book) => lib.id === rated.id) && !favoriteBooks.some((fav: Book) => fav.id === rated.id))
+            ].map(book => [book.id, book])
+        ).values()
     );
 
-    if (filteredBooks.length === 0) {
+    if (allBooks.length === 0) {
         return (
             <View style={{ alignItems: 'center', width: '100%', padding: 20 }}>
-                <Text style={{ color: 'gray' }}>No other books in your library.</Text>
+                <Text style={{ color: 'gray' }}>No books in your library.</Text>
             </View>
         );
     }
@@ -20,7 +26,7 @@ export default function MyBooks() {
     return (
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <FlatList
-                data={filteredBooks}
+                data={allBooks}
                 numColumns={3}
                 scrollEnabled={false}
                 keyExtractor={(item: Book) => item.id.toString()}

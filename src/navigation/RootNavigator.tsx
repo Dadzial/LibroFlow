@@ -3,10 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import Header from '../components/core/Header';
 import BookDisplayScreen from "../screens/books-display/BookDisplayScreen";
+import RateBookScreen from '../screens/rating/RateBookScreen';
+import type { Book } from '../context/BooksContext';
 
 export type RootStackParamList = {
     Main:undefined;
     BookDisplay: { bookId: string };
+    RateBook: { book: Book };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -20,6 +23,7 @@ export default function RootNavigator() {
         >
             <Stack.Screen name="Main" component={BottomTabs} />
             <Stack.Screen name="BookDisplay" component={BookDisplayScreen} />
+            <Stack.Screen name="RateBook" component={RateBookScreen} />
         </Stack.Navigator>
     );
 }

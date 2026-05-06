@@ -9,6 +9,16 @@ export interface Book {
     language?: string;
     description?: string;
     progress?: number;
+    rating?: number;
+    note?: string;
+    updatedAt?: string;
+}
+
+export interface BookReview {
+    book: Book;
+    rating: number;
+    note: string;
+    updatedAt: string;
 }
 
 export interface BooksContextType {
@@ -16,6 +26,7 @@ export interface BooksContextType {
     favoriteBooks: Book[];
     toReadBooks: Book[];
     trashBooks: Book[];
+    ratedBooks: Book[];
     currentlyReadingBook: Book | null;
     readingTime: number;
     isReading: boolean;
@@ -28,6 +39,9 @@ export interface BooksContextType {
     clearTrash: () => void;
     setCurrentlyReadingBook: (book: Book | null) => void;
     setIsReading: (isReading: boolean) => void;
+    getBookReview: (bookId: string | number) => BookReview | null;
+    saveBookReview: (book: Book, rating: number, note: string) => void;
+    clearBookReview: (bookId: string | number) => void;
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
@@ -37,6 +51,7 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     const [trashBooks, setTrashBooks] = useState<Book[]>([]);
     const [favoriteIds, setFavoriteIds] = useState<(string | number)[]>([]);
     const [toReadIds, setToReadIds] = useState<(string | number)[]>([]);
+    const [bookReviewsById, setBookReviewsById] = useState<Record<string, BookReview>>({});
     const [currentlyReadingBook, setCurrentlyReadingBook] = useState<Book | null>(null);
     const [readingTime, setReadingTime] = useState(0);
     const [isReading, setIsReading] = useState(false);
@@ -107,28 +122,68 @@ export function BooksProvider({ children }: { children: ReactNode }) {
         );
     };
 
-    const favoriteBooks = libraryBooks.filter(book => favoriteIds.includes(book.id));
+    const saveBookReview = (book: Book, rating: number, note: string) => {
+        const updatedAt = new Date().toISOString();
+
+        setBookReviewsById((prev) => ({
+            ...prev,
+            [String(book.id)]: {
+                book: {
+                    ...book,
+                    rating,
+                    note,
+                    updatedAt,
+                },
+                rating,
+                note,
+                updatedAt,
+            },
+        }));
+    };
+
+    const getBookReview = (bookId: string | number) => bookReviewsById[String(bookId)] ?? null;
+
+    const clearBookReview = (bookId: string | number) => {
+        setBookReviewsById((prev) => {
+            const updated = { ...prev };
+            delete updated[String(bookId)];
+            return updated;
+        });
+    };
+
+    const favoriteBooks = libraryBooks.filter(book => {
+        const isFavorite = favoriteIds.includes(book.id);
+        const hasRating5 = Object.values(bookReviewsById).some(review => review.book.id === book.id && review.rating === 5);
+        return isFavorite || hasRating5;
+    });
     const toReadBooks = libraryBooks.filter(book => toReadIds.includes(book.id));
+    const ratedBooks = Object.values(bookReviewsById)
+        .map((review) => review.book)
+        .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
 
     return (
         <BooksContext.Provider value={{ 
-            libraryBooks, 
-            favoriteBooks, 
-            toReadBooks,
-            trashBooks,
-            currentlyReadingBook,
-            readingTime,
-            isReading,
-            addBookToLibrary, 
-            removeBookFromLibrary, 
-            toggleFavorite,
-            toggleToRead,
-            restoreFromTrash,
-            permanentDeleteFromTrash,
-            clearTrash,
-            setCurrentlyReadingBook,
-            setIsReading
-        }}>
+             libraryBooks,
+             favoriteBooks,
+             toReadBooks,
+             trashBooks,
+             ratedBooks,
+             currentlyReadingBook,
+             readingTime,
+             isReading,
+             addBookToLibrary,
+             removeBookFromLibrary,
+             toggleFavorite,
+             toggleToRead,
+             restoreFromTrash,
+             permanentDeleteFromTrash,
+             clearTrash,
+             setCurrentlyReadingBook,
+             setIsReading,
+             getBookReview,
+             saveBookReview,
+             clearBookReview,
+         }}>
             {children}
         </BooksContext.Provider>
     );

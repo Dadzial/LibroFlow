@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, View, TouchableOpacity, Dimensions} from 'react-native';
+import {ScrollView, Text, View, Dimensions} from 'react-native';
 import { libraryStyles } from "./LibraryScreen.styles";
 import MyBooks from "../../components/library/MyBooks";
 import { LibraryBookPreview } from "../../components/library/BookPreview";
@@ -11,7 +11,7 @@ const GAP = 15;
 const CARD_WIDTH = (width - 2 * PADDING - 2 * GAP) / 3;
 
 export default function LibraryScreen() {
-    const { favoriteBooks, removeBookFromLibrary } = useBooks();
+    const { favoriteBooks, ratedBooks, removeBookFromLibrary } = useBooks() as any;
 
     return (
         <View style={libraryStyles.container}>
@@ -50,6 +50,35 @@ export default function LibraryScreen() {
                 ) : (
                     <View style={{ paddingHorizontal: 20, marginBottom: 20,alignItems:"center" }}>
                         <Text style={{ color: 'gray' }}>No favorite books yet.</Text>
+                    </View>
+                )}
+
+                <View style={libraryStyles.sectionHeader}>
+                    <Text style={libraryStyles.sectionTitle}>Rated Books</Text>
+                </View>
+
+                {ratedBooks.length > 0 ? (
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={[libraryStyles.horizontalList, { paddingHorizontal: 20 }]}
+                        style={libraryStyles.favoritesList}
+                    >
+                        {ratedBooks.map((item: Book, idx: number) => (
+                            <LibraryBookPreview
+                                key={item.id}
+                                book={item}
+                                onRemove={removeBookFromLibrary}
+                                style={{
+                                    width: CARD_WIDTH,
+                                    marginRight: idx !== ratedBooks.length - 1 ? GAP : 0,
+                                }}
+                            />
+                        ))}
+                    </ScrollView>
+                ) : (
+                    <View style={{ paddingHorizontal: 20, marginBottom: 20, alignItems: 'center' }}>
+                        <Text style={{ color: 'gray' }}>No rated books yet.</Text>
                     </View>
                 )}
 

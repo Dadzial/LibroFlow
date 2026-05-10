@@ -4,6 +4,7 @@ import { getIcon } from '../../utils/IconParser';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigation/RootNavigator';
+import { useTheme } from '../../context/ThemeContext';
 
 interface BookItemProps {
     book: Book;
@@ -11,6 +12,7 @@ interface BookItemProps {
 }
 
 export default function BookItem({ book, onRemove }: BookItemProps) {
+    const { themeColors, isDark } = useTheme();
     const deleteIcon = getIcon('deleteIcon');
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -28,18 +30,21 @@ export default function BookItem({ book, onRemove }: BookItemProps) {
                 <Image source={{ uri: book.cover }} style={styles.image} />
                 {onRemove && (
                     <TouchableOpacity
-                        style={styles.removeButton}
+                        style={[
+                            styles.removeButton,
+                            { backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' }
+                        ]}
                         onPress={(e) => {
                             e.stopPropagation();
                             onRemove(book.id);
                         }}
                     >
-                        <Image source={deleteIcon} style={styles.icon} />
+                        <Image source={deleteIcon} style={[styles.icon, { tintColor: themeColors.accentRed }]} />
                     </TouchableOpacity>
                 )}
             </View>
-            <Text numberOfLines={1} style={styles.title}>{book.title}</Text>
-            <Text numberOfLines={1} style={styles.author}>{book.author}</Text>
+            <Text numberOfLines={1} style={[styles.title, { color: themeColors.textPrimaryColor }]}>{book.title}</Text>
+            <Text numberOfLines={1} style={[styles.author, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>{book.author}</Text>
         </TouchableOpacity>
     );
 }

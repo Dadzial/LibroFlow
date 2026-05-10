@@ -1,14 +1,17 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useBooks } from '../../context/BooksContext';
-import { getColor } from '../../utils/ColorsParser';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function CurrentlyReadingCard() {
+    const { themeColors } = useTheme();
     const { currentlyReadingBook, readingTime, isReading, setIsReading, setCurrentlyReadingBook } = useBooks();
 
     if (!currentlyReadingBook) {
         return (
-            <View style={[styles.card, { justifyContent: 'center', alignItems: 'center', height: 100 }]}>
-                <Text style={{ color: 'gray' }}>Select a book to start reading!</Text>
+            <View style={[styles.card, { backgroundColor: themeColors.secondColor }]}>
+                <Text style={{ color: themeColors.textPrimaryColor }}>
+                    Select a book to start reading!
+                </Text>
             </View>
         );
     }
@@ -28,41 +31,47 @@ export default function CurrentlyReadingCard() {
     };
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: themeColors.secondColor }]}>
             <Image source={{ uri: currentlyReadingBook.cover }} style={styles.cover} />
 
             <View style={styles.content}>
                 <View>
                     <View style={styles.headerRow}>
-                        <Text style={styles.author}>{currentlyReadingBook.author}</Text>
-                        <TouchableOpacity style={styles.deleteButton} onPress={handleRemoveCurrent}>
-                            <Text style={styles.deleteButtonText}>✕</Text>
+                        <Text style={[styles.author, { color: themeColors.textPrimaryColor }]}>{currentlyReadingBook.author}</Text>
+                        <TouchableOpacity
+                            style={[
+                                styles.deleteButton,
+                                { backgroundColor: themeColors.accentRed + '33' }
+                            ]}
+                            onPress={handleRemoveCurrent}
+                        >
+                            <Text style={[styles.deleteButtonText, { color: themeColors.accentRed }]}>✕</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.title} numberOfLines={1}>{currentlyReadingBook.title}</Text>
+                    <Text style={[styles.title, { color: themeColors.textPrimaryColor }]} numberOfLines={1}>{currentlyReadingBook.title}</Text>
                 </View>
 
                 <View>
                     <View style={styles.timerContainer}>
-                        <Text style={styles.timerText}>{formatTime(readingTime)}</Text>
+                        <Text style={[styles.timerText, { backgroundColor: themeColors.accent + '33', color: themeColors.accent }]}>{formatTime(readingTime)}</Text>
                     </View>
                     
                     <View style={styles.progressRow}>
-                        <View style={styles.progressBar}>
+                        <View style={[styles.progressBar, { backgroundColor: themeColors.primaryColor }]}>
                             <View
                                 style={[
                                     styles.progress,
-                                    { width: `${progress * 100}%` },
+                                    { width: `${progress * 100}%`, backgroundColor: themeColors.accent },
                                 ]}
                             />
                         </View>
-                        <Text style={styles.progressText}>
+                        <Text style={[styles.progressText, { color: themeColors.textPrimaryColor }]}>
                             {Math.round(progress * 100)}%
                         </Text>
                     </View>
 
                     <TouchableOpacity
-                        style={[styles.button, isReading && styles.buttonActive]}
+                        style={[styles.button, { backgroundColor: themeColors.accent }, isReading && styles.buttonActive]}
                         activeOpacity={0.7}
                         onPress={() => setIsReading(!isReading)}
                     >

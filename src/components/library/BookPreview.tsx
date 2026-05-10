@@ -5,6 +5,7 @@ import { getIcon } from "../../utils/IconParser";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/RootNavigator";
+import { useTheme } from "../../context/ThemeContext";
 
 export interface LibraryBookPreviewProps {
     style?: ViewStyle;
@@ -40,30 +41,38 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
                 <View style={styles.actionsContainer}>
                     {onRemove && (
                         <TouchableOpacity
-                            style={styles.actionButton}
+                            style={[styles.actionButton, { backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' }]}
                             onPress={() => onRemove(book.id)}
                         >
-                            <Image source={deleteIcon} style={styles.icon} />
+                            <Image source={deleteIcon} style={[styles.icon, { tintColor: isDark ? themeColors.accentRed : '#666' }]} />
                         </TouchableOpacity>
                     )}
                     <TouchableOpacity
-                        style={[styles.actionButton, isFavorite && styles.favoriteActive]}
+                        style={[
+                            styles.actionButton,
+                            { backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' },
+                            isFavorite && styles.favoriteActive
+                        ]}
                         onPress={() => toggleFavorite(book.id)}
                     >
-                        <Image source={heartIcon} style={[styles.icon, {tintColor: isFavorite ? '#FFF' : '#666'}]} />
+                        <Image source={heartIcon} style={[styles.icon, {tintColor: isFavorite ? '#FFF' : (isDark ? '#BBB' : '#666')}]} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.actionButton, isToRead && styles.toReadActive]}
+                        style={[
+                            styles.actionButton,
+                            { backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' },
+                            isToRead && styles.toReadActive
+                        ]}
                         onPress={() => toggleToRead(book.id)}
                     >
-                        <Image source={toReadIcon} style={[styles.icon, {tintColor: isToRead ? '#FFF' : '#666'}]} />
+                        <Image source={toReadIcon} style={[styles.icon, {tintColor: isToRead ? '#FFF' : (isDark ? '#BBB' : '#666')}]} />
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text numberOfLines={1} style={styles.title}>
+            <Text numberOfLines={1} style={[styles.title, { color: themeColors.textPrimaryColor }]}>
                 {book.title}
             </Text>
-            <Text style={styles.author}>
+            <Text style={[styles.author, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>
                 {book.author}
             </Text>
             {review && (

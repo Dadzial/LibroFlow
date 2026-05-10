@@ -2,18 +2,20 @@ import {StyleSheet, Text, TouchableOpacity, View, Image, FlatList} from 'react-n
 import {getColor} from "../../utils/ColorsParser";
 import {useBooks, Book} from "../../context/BooksContext";
 import {getIcon} from "../../utils/IconParser";
+import { useTheme } from '../../context/ThemeContext';
 
 export default function TrashList() {
+    const { themeColors } = useTheme();
     const { trashBooks, permanentDeleteFromTrash, clearTrash , restoreFromTrash } = useBooks();
     const trashIcon = getIcon('deleteIcon');
     const restoreIcon = getIcon('restoreIcon');
 
     const renderTrashItem = ({ item }: { item: Book }) => (
-        <View style={styles.trashItem}>
+        <View style={[styles.trashItem, { backgroundColor: themeColors.secondColor }]}>
             <Image source={{ uri: item.cover }} style={styles.cover} />
             <View style={styles.bookInfo}>
-                <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
-                <Text style={styles.author}>{item.author}</Text>
+                <Text style={[styles.title, { color: themeColors.textPrimaryColor }]} numberOfLines={1}>{item.title}</Text>
+                <Text style={[styles.author, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>{item.author}</Text>
             </View>
             <TouchableOpacity
                 onPress={() => restoreFromTrash(item.id)}
@@ -33,7 +35,7 @@ export default function TrashList() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>{trashBooks.length} Items found</Text>
+                <Text style={[styles.headerTitle, { color: themeColors.textPrimaryColor }]}>{trashBooks.length} Items found</Text>
                 {trashBooks.length > 0 && (
                     <TouchableOpacity onPress={clearTrash}>
                         <Text style={styles.cleanTrash}>Clean Trash</Text>
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
     trashItem:{
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: getColor('secondColor'),
         borderRadius: 12,
         padding: 10,
         marginBottom: 12,
@@ -106,12 +107,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: getColor('textPrimaryColor'),
         marginBottom: 4,
     },
     author: {
         fontSize: 14,
-        color: 'gray',
     },
     deleteButton: {
         padding: 10,

@@ -5,6 +5,7 @@ import {getColor} from "../../utils/ColorsParser";
 import {fetchAllBooks} from "../../api/FetchAllBooks";
 import {RootStackParamList} from "../../navigation/RootNavigator";
 import {StackNavigationProp} from "@react-navigation/stack";
+import { useTheme } from '../../context/ThemeContext';
 
 type NewBook = {
     googleId?: string;
@@ -26,6 +27,7 @@ const CARD_WIDTH = (width - 50 - 30) / 3;
 
 export default function NewBooks({activeCategories, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
+    const { themeColors } = useTheme();
     const [newBooks, setNewBooks] = useState<NewBook[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [contentWidth, setContentWidth] = useState(1);
@@ -78,27 +80,27 @@ export default function NewBooks({activeCategories, searchText}: AllBooksProps) 
         >
             <Image
                 source={{ uri: item.cover }}
-                style={styles.bookCover}
+                style={[styles.bookCover, { backgroundColor: themeColors.secondColor }]}
                 resizeMode="cover"
             />
-            <Text style={styles.bookTitle} numberOfLines={1}>{item.title}</Text>
-            <Text style={styles.bookAuthor} numberOfLines={1}>{item.author}</Text>
+            <Text style={[styles.bookTitle, { color: themeColors.textPrimaryColor }]} numberOfLines={1}>{item.title}</Text>
+            <Text style={[styles.bookAuthor, { color: themeColors.scrollbarColor }]} numberOfLines={1}>{item.author}</Text>
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>New Books</Text>
+                <Text style={[styles.headerTitle, { color: themeColors.textPrimaryColor }]}>New Books</Text>
             </View>
 
             {isLoading ? (
                 <View style={styles.loaderContainer}>
-                    <ActivityIndicator size="large" color={getColor('primaryColor' as any)} />
+                    <ActivityIndicator size="large" color={themeColors.accent} />
                 </View>
             ) : filteredBooks.length === 0 ? (
-                <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No books found</Text>
+                <View style={[styles.emptyContainer, { backgroundColor: themeColors.secondColor }]}>
+                    <Text style={[styles.emptyText, { color: themeColors.textPrimaryColor, opacity: 0.6 }]}>No books found</Text>
                 </View>
             ) : (
                 <View>
@@ -119,7 +121,7 @@ export default function NewBooks({activeCategories, searchText}: AllBooksProps) 
                     />
 
                     <View 
-                        style={styles.customScrollbarBg}
+                        style={[styles.customScrollbarBg, { backgroundColor: themeColors.secondColor }]}
                         onLayout={(e) => setScrollbarWidth(e.nativeEvent.layout.width)}
                     >
                         <Animated.View
@@ -127,7 +129,8 @@ export default function NewBooks({activeCategories, searchText}: AllBooksProps) 
                                 styles.customScrollbarIndicator,
                                 {
                                     width: indicatorWidth,
-                                    transform: [{ translateX }]
+                                    transform: [{ translateX }],
+                                    backgroundColor: themeColors.scrollbarColor
                                 }
                             ]}
                         />
@@ -152,7 +155,6 @@ const styles = StyleSheet.create({
     headerTitle:{
         fontSize: 15,
         fontWeight: 'bold',
-        color: getColor('textPrimaryColor' as any),
     },
     viewAll:{
         fontSize: 15,
@@ -168,13 +170,11 @@ const styles = StyleSheet.create({
         height: 180,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: getColor('secondColor' as any),
         borderRadius: 8,
         marginHorizontal: 4,
     },
     emptyText: {
         fontSize: 16,
-        color: getColor('scrollbarColor' as any),
         fontWeight: '600',
     },
     listContainer: {
@@ -189,23 +189,19 @@ const styles = StyleSheet.create({
         height: CARD_WIDTH * 1.6,
         borderRadius: 8,
         marginBottom: 8,
-        backgroundColor: getColor('secondColor' as any),
     },
     bookTitle: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: getColor('textPrimaryColor' as any),
         marginBottom: 2,
     },
     bookAuthor: {
         fontSize: 12,
         marginBottom: 5,
-        color: getColor('scrollbarColor' as any),
     },
     customScrollbarBg: {
         height: 3,
         width: '100%',
-        backgroundColor: getColor('secondColor' as any),
         borderRadius: 10,
         alignSelf: 'center',
         overflow: 'hidden',
@@ -213,7 +209,6 @@ const styles = StyleSheet.create({
     },
     customScrollbarIndicator: {
         height: '100%',
-        backgroundColor: getColor('scrollbarColor' as any),
         borderRadius: 10,
     }
 });

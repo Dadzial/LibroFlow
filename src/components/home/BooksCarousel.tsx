@@ -3,6 +3,7 @@ import BookItem from './BookItem';
 import { getColor } from "../../utils/ColorsParser";
 import { Book } from '../../context/BooksContext';
 import React, { useRef } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 
 interface BooksCarouselProps {
@@ -11,12 +12,13 @@ interface BooksCarouselProps {
 }
 
 export default function BooksCarousel({ books, onRemove }: BooksCarouselProps) {
+    const { themeColors } = useTheme();
     const scrollX = useRef(new Animated.Value(0)).current;
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Books to read</Text>
+                <Text style={[styles.title, { color: themeColors.textPrimaryColor }]}>Books to read</Text>
             </View>
 
             <Animated.FlatList
@@ -35,11 +37,12 @@ export default function BooksCarousel({ books, onRemove }: BooksCarouselProps) {
                 scrollEventThrottle={16}
             />
 
-            <View style={styles.customScrollbarBg}>
+            <View style={[styles.customScrollbarBg, { backgroundColor: themeColors.secondColor }]}>
                 <Animated.View
                     style={[
                         styles.customScrollbarIndicator,
                         {
+                            backgroundColor: themeColors.scrollbarColor,
                             transform: [{
                                 translateX: Animated.multiply(scrollX, 0.2)
                             }]

@@ -6,6 +6,7 @@ import { fetchAllBooks } from "../../api/FetchAllBooks";
 import {getIcon} from "../../utils/IconParser";
 import { useBooks, Book } from '../../context/BooksContext';
 import { RootStackParamList } from '../../navigation/RootNavigator';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function BookDisplayScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'BookDisplay'>>();
@@ -48,10 +49,10 @@ export default function BookDisplayScreen() {
     }, [bookId]);
 
     if (loading) {
-        return <View style={bookDisplayScreenStyles.container}><ActivityIndicator size="large" color="#2563EB" /></View>;
+        return <View style={[bookDisplayScreenStyles.container, { backgroundColor: themeColors.primaryColor }]}><ActivityIndicator size="large" color={themeColors.accent} /></View>;
     }
     if (error || !book) {
-        return <View style={bookDisplayScreenStyles.container}><Text>Error loading book: {error}</Text></View>;
+        return <View style={[bookDisplayScreenStyles.container, { backgroundColor: themeColors.primaryColor }]}><Text style={{ color: themeColors.textPrimaryColor }}>Error loading book: {error}</Text></View>;
     }
 
     const handleAddToLibrary = () => {
@@ -76,13 +77,13 @@ export default function BookDisplayScreen() {
     };
 
     return (
-        <View style={bookDisplayScreenStyles.container}>
+        <View style={[bookDisplayScreenStyles.container, { backgroundColor: themeColors.primaryColor }]}>
             <TouchableOpacity
-                style={bookDisplayScreenStyles.closeButton}
+                style={[bookDisplayScreenStyles.closeButton, { backgroundColor: themeColors.textPrimaryColor + '1A' }]}
                 onPress={() => navigation.goBack()}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-                <Text style={bookDisplayScreenStyles.closeButtonText}>×</Text>
+                <Text style={[bookDisplayScreenStyles.closeButtonText, { color: themeColors.textPrimaryColor }]}>×</Text>
             </TouchableOpacity>
 
             <View style={bookDisplayScreenStyles.bookCoverContainer}>
@@ -94,28 +95,28 @@ export default function BookDisplayScreen() {
             </View>
 
             <View style={bookDisplayScreenStyles.bookTitleAuthor}>
-                <Text style={bookDisplayScreenStyles.bookTitle}>{book.title}</Text>
-                <Text style={bookDisplayScreenStyles.bookAuthor}>{book.author}</Text>
+                <Text style={[bookDisplayScreenStyles.bookTitle, { color: themeColors.textPrimaryColor }]}>{book.title}</Text>
+                <Text style={[bookDisplayScreenStyles.bookAuthor, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>{book.author}</Text>
             </View>
 
-            <View style={bookDisplayScreenStyles.bookStats}>
+            <View style={[bookDisplayScreenStyles.bookStats, { backgroundColor: themeColors.secondColor }]}>
                 <View style={bookDisplayScreenStyles.bookStatItem}>
-                    <Text style={bookDisplayScreenStyles.bookStatValue}>
+                    <Text style={[bookDisplayScreenStyles.bookStatValue, { color: themeColors.textPrimaryColor }]}>
                         {book.pageCount ?? '—'}
                     </Text>
-                    <Text style={bookDisplayScreenStyles.bookStatLabel}>Pages</Text>
+                    <Text style={[bookDisplayScreenStyles.bookStatLabel, { color: themeColors.textPrimaryColor, opacity: 0.6 }]}>Pages</Text>
                 </View>
-                <View style={bookDisplayScreenStyles.bookStatDivider} />
+                <View style={[bookDisplayScreenStyles.bookStatDivider, { backgroundColor: themeColors.textPrimaryColor + '33' }]} />
                 <View style={bookDisplayScreenStyles.bookStatItem}>
-                    <Text style={bookDisplayScreenStyles.bookStatValue}>
+                    <Text style={[bookDisplayScreenStyles.bookStatValue, { color: themeColors.textPrimaryColor }]}>
                         {book.language?.toUpperCase() ?? '—'}
                     </Text>
-                    <Text style={bookDisplayScreenStyles.bookStatLabel}>Lang</Text>
+                    <Text style={[bookDisplayScreenStyles.bookStatLabel, { color: themeColors.textPrimaryColor, opacity: 0.6 }]}>Lang</Text>
                 </View>
             </View>
 
             <ScrollView persistentScrollbar={true} style={bookDisplayScreenStyles.bookDescription}>
-                <Text style={bookDisplayScreenStyles.bookDescriptionText}>{book.description || 'No description available.'}</Text>
+                <Text style={[bookDisplayScreenStyles.bookDescriptionText, { color: themeColors.textPrimaryColor, opacity: 0.9 }]}>{book.description || 'No description available.'}</Text>
             </ScrollView>
 
             <View style={bookDisplayScreenStyles.bookActions}>

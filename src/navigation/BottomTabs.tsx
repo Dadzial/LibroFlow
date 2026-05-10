@@ -6,17 +6,24 @@ import TrashScreen from "../screens/trash/TrashScreen";
 import LottoScreen from "../screens/lotto/RandomScreen"
 import LibraryScreen from "../screens/library/LibraryScreen";
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
+import { Colors } from '../utils/ColorsParser';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs(){
+    const { theme } = useTheme();
+    const themeColors = Colors[theme];
+
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarActiveTintColor: '#6A28B0',
+            screenOptions={({ route }
+            ) => ({
+                tabBarStyle: { backgroundColor: themeColors.secondColor }, // Theme the tab bar
+                tabBarActiveTintColor: themeColors.accent,
                 tabBarInactiveTintColor: 'gray',
+                headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     let iconName: string;
                     switch (route.name) {

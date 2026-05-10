@@ -19,7 +19,7 @@ const MAIN_CATEGORIES = [
 ];
 
 export default function SearchScreen() {
-    const [activeCategory, setActiveCategory] = useState<string | null>(null);
+    const [activeCategories, setActiveCategories] = useState<string[]>([]);
     const [searchText, setSearchText] = useState('');
 
     return (
@@ -32,16 +32,25 @@ export default function SearchScreen() {
             </View>
             <View style={searchStyles.quickFiltersContainer}>
                 <QuickFilters
-                    activeCategory={activeCategory}
-                    onCategoryChange={setActiveCategory}
+                    activeCategories={activeCategories}
+                    onCategoriesChange={setActiveCategories}
                     categories={MAIN_CATEGORIES}
                 />
             </View>
-            <View style={searchStyles.newBooksContainer}>
-                <NewBooks activeCategory={activeCategory} searchText={searchText} />
-            </View>
-            <View style={searchStyles.allBooksContainer}>
-                <AllBooks activeCategory={activeCategory} searchText={searchText} />
+
+            <View style={{ flex: 1, justifyContent: 'space-around' }}>
+                <View style={searchStyles.newBooksContainer}>
+                    <NewBooks
+                        activeCategories={activeCategories}
+                        searchText={searchText}
+                    />
+                </View>
+                <View style={searchStyles.allBooksContainer}>
+                    <AllBooks
+                        activeCategories={activeCategories}
+                        searchText={searchText}
+                    />
+                </View>
             </View>
         </View>
     );

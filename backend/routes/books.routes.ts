@@ -3,8 +3,8 @@ import {AllBooksService} from "../services/books.services";
 
 export const getAllBooks = async (req: any, res: any) => {
     try {
-        const { status } = req.query
-        const books = await AllBooksService.getAll(status)
+        const { status, category } = req.query
+        const books = await AllBooksService.getAll(status, category)
         logger.info('Books fetched successfully')
         res.json(books)
     } catch (err) {

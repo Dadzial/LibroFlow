@@ -13,7 +13,7 @@ app.get('/api/books/all', getAllBooks)
 app.get('/api/books/search', search)
 
 connectToDatabase().then(() => {
-    app.listen(3000, () => {
+    app.listen(3000,() => {
         logger.info('Server is running on port 3000')
     })
 })

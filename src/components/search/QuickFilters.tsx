@@ -2,14 +2,22 @@ import {StyleSheet, View, FlatList,TouchableOpacity,Text} from 'react-native';
 import {getColor} from "../../utils/ColorsParser";
 
 type QuickFiltersProps = {
-    activeCategory: string | null;
-    onCategoryChange: (category: string | null) => void;
+    activeCategories: string[];
+    onCategoriesChange: (categories: string[]) => void;
     categories: string[];
 }
 
-export default function QuickFilters({activeCategory, onCategoryChange, categories}: QuickFiltersProps) {
+export default function QuickFilters({activeCategories, onCategoriesChange, categories}: QuickFiltersProps) {
     const handleClearFilters = () => {
-        onCategoryChange(null);
+        onCategoriesChange([]);
+    }
+
+    const toggleCategory = (category: string) => {
+        if (activeCategories.includes(category)) {
+            onCategoriesChange(activeCategories.filter(c => c !== category));
+        } else {
+            onCategoriesChange([...activeCategories, category]);
+        }
     }
 
     return (
@@ -29,13 +37,13 @@ export default function QuickFilters({activeCategory, onCategoryChange, categori
                     <TouchableOpacity
                         style={[
                             styles.filterButton,
-                            activeCategory === item && styles.filterButtonActive
+                            activeCategories.includes(item) && styles.filterButtonActive
                         ]}
-                        onPress={() => onCategoryChange(item)}
+                        onPress={() => toggleCategory(item)}
                     >
                         <Text style={[
                             styles.filterText,
-                            activeCategory === item && styles.filterTextActive
+                            activeCategories.includes(item) && styles.filterTextActive
                         ]}>
                             {item}
                         </Text>

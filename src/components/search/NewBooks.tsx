@@ -17,34 +17,36 @@ type NewBook = {
 }
 
 type AllBooksProps = {
-    activeCategory:string | null
-    searchText:string
+    activeCategories: string[]
+    searchText: string
 }
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 50 - 30) / 3;
 
-export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
+export default function NewBooks({activeCategories, searchText}: AllBooksProps) {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'BookDisplay'>>();
     const [newBooks, setNewBooks] = useState<NewBook[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [contentWidth, setContentWidth] = useState(1);
+    const [listWidth, setListWidth] = useState(1);
+    const [scrollbarWidth, setScrollbarWidth] = useState(1);
     const scrollX = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         const loadBooks = async () => {
+            setIsLoading(true);
             try {
-                const fetchedBooks: any[] = await fetchAllBooks('none');
+                const fetchedBooks: any[] = await fetchAllBooks('none', activeCategories);
 
-                const twoMonthsAgo = new Date();
-                twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 36);
+                const threeYearsAgo = new Date();
+                threeYearsAgo.setMonth(threeYearsAgo.getMonth() - 36);
 
                 const recentBooks = fetchedBooks.filter((book) => {
-
                     const dateToCheck = book.publishedDate ? book.publishedDate : book.createdAt;
-
                     if (!dateToCheck) return false;
                     const bookDate = new Date(dateToCheck);
-                    return bookDate >= twoMonthsAgo;
+                    return bookDate >= threeYearsAgo;
                 });
 
                 setNewBooks(recentBooks);
@@ -55,21 +57,19 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
             }
         };
         loadBooks();
-    }, []);
+    }, [activeCategories]);
 
-    const displayBooks = activeCategory
-        ? newBooks.filter(book => {
-            if (!book.categories) return false;
-            return book.categories.some(cat =>
-                cat.toLowerCase().includes(activeCategory.toLowerCase())
-            );
-        })
-        : newBooks;
-
-    const filteredBooks = displayBooks.filter(book =>
+    const filteredBooks = newBooks.filter(book =>
         book.title.toLowerCase().includes(searchText.toLowerCase()) ||
         book.author.toLowerCase().includes(searchText.toLowerCase())
     );
+
+    const indicatorWidth = Math.max(20, scrollbarWidth * (listWidth / Math.max(contentWidth, listWidth)));
+    const translateX = scrollX.interpolate({
+        inputRange: [0, Math.max(1, contentWidth - listWidth)],
+        outputRange: [0, scrollbarWidth - indicatorWidth],
+        extrapolate: 'clamp',
+    });
 
     const renderBookItem = ({ item }: { item: NewBook }) => (
         <TouchableOpacity
@@ -96,9 +96,9 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
                 <View style={styles.loaderContainer}>
                     <ActivityIndicator size="large" color={getColor('primaryColor' as any)} />
                 </View>
-            ) : newBooks.length === 0 ? (
+            ) : filteredBooks.length === 0 ? (
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No new books</Text>
+                    <Text style={styles.emptyText}>No books found</Text>
                 </View>
             ) : (
                 <View>
@@ -108,8 +108,9 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
                         keyExtractor={(item, index) => item.googleId ? item.googleId : index.toString()}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        persistentScrollbar={true}
                         contentContainerStyle={styles.listContainer}
+                        onContentSizeChange={(w) => setContentWidth(w)}
+                        onLayout={(e) => setListWidth(e.nativeEvent.layout.width)}
                         onScroll={Animated.event(
                             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
                             { useNativeDriver: false }
@@ -117,14 +118,16 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
                         scrollEventThrottle={16}
                     />
 
-                    <View style={styles.customScrollbarBg}>
+                    <View 
+                        style={styles.customScrollbarBg}
+                        onLayout={(e) => setScrollbarWidth(e.nativeEvent.layout.width)}
+                    >
                         <Animated.View
                             style={[
                                 styles.customScrollbarIndicator,
                                 {
-                                    transform: [{
-                                        translateX: Animated.multiply(scrollX, 0.2)
-                                    }]
+                                    width: indicatorWidth,
+                                    transform: [{ translateX }]
                                 }
                             ]}
                         />
@@ -134,6 +137,7 @@ export default function NewBooks({activeCategory, searchText}: AllBooksProps) {
         </View>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 25,
@@ -209,7 +213,6 @@ const styles = StyleSheet.create({
     },
     customScrollbarIndicator: {
         height: '100%',
-        width: 30,
         backgroundColor: getColor('scrollbarColor' as any),
         borderRadius: 10,
     }

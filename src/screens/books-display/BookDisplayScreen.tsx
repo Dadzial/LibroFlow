@@ -7,7 +7,6 @@ import {getIcon} from "../../utils/IconParser";
 import { useBooks, Book } from '../../context/BooksContext';
 import { RootStackParamList } from '../../navigation/RootNavigator';
 import { useTheme } from '../../context/ThemeContext';
-import {getThemeColors} from "../../utils/ColorsParser";
 
 export default function BookDisplayScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'BookDisplay'>>();
@@ -18,7 +17,7 @@ export default function BookDisplayScreen() {
     const [error, setError] = useState<string | null>(null);
     const addToLibIcon = getIcon('addTolibIcon');
     const { addBookToLibrary, setCurrentlyReadingBook } = useBooks();
-    const themeColors = getThemeColors(useTheme().theme);
+    const { themeColors } = useTheme();
 
     useEffect(() => {
         const loadBook = async () => {
@@ -123,17 +122,26 @@ export default function BookDisplayScreen() {
 
             <View style={bookDisplayScreenStyles.bookActions}>
                 <View style={bookDisplayScreenStyles.topRow}>
-                    <TouchableOpacity style={bookDisplayScreenStyles.addToLibButton} onPress={handleAddToLibrary}>
-                        <Image source={addToLibIcon} style={{width: 28, height: 28}} />
+                    <TouchableOpacity
+                        style={[bookDisplayScreenStyles.addToLibButton, { backgroundColor: themeColors.secondColor }]}
+                        onPress={handleAddToLibrary}
+                    >
+                        <Image source={addToLibIcon} style={{width: 28, height: 28, tintColor: themeColors.accent}} />
                     </TouchableOpacity>
                 </View>
 
                 <View style={bookDisplayScreenStyles.actionRow}>
-                    <TouchableOpacity style={bookDisplayScreenStyles.startReadButton} onPress={handleStartReading}>
+                    <TouchableOpacity
+                        style={[bookDisplayScreenStyles.startReadButton, { backgroundColor: themeColors.accent }]}
+                        onPress={handleStartReading}
+                    >
                         <Text style={bookDisplayScreenStyles.actionButtonText}>Start Reading</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={bookDisplayScreenStyles.rateButton} onPress={handleRateBook}>
-                        <Text style={bookDisplayScreenStyles.rateButtonText}>Rate</Text>
+                    <TouchableOpacity
+                        style={[bookDisplayScreenStyles.rateButton, { backgroundColor: themeColors.secondColor }]}
+                        onPress={handleRateBook}
+                    >
+                        <Text style={[bookDisplayScreenStyles.rateButtonText, { color: themeColors.textPrimaryColor }]}>Rate</Text>
                     </TouchableOpacity>
                 </View>
             </View>

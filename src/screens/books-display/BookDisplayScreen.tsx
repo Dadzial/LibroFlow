@@ -9,7 +9,7 @@ import { RootStackParamList } from '../../navigation/RootNavigator';
 
 export default function BookDisplayScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'BookDisplay'>>();
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const { bookId } = route.params;
     const [book, setBook] = useState<Book | null>(null);
     const [loading, setLoading] = useState(true);
@@ -22,7 +22,10 @@ export default function BookDisplayScreen() {
             try {
                 const allBooks = await fetchAllBooks('none');
                 const foundBook = allBooks.find((b) => b.googleId === bookId || b.title === bookId);
-                if (!foundBook) throw new Error('Book not found');
+                if (!foundBook) {
+                    setError('Book not found');
+                    return;
+                }
 
                 const mappedBook: Book = {
                     id: foundBook.googleId || foundBook.title,
@@ -63,6 +66,12 @@ export default function BookDisplayScreen() {
             setCurrentlyReadingBook(book);
             // @ts-ignore
             navigation.navigate('Main', { screen: 'Home' });
+        }
+    };
+
+    const handleRateBook = () => {
+        if (book) {
+            navigation.navigate('RateBook', { book });
         }
     };
 
@@ -110,12 +119,20 @@ export default function BookDisplayScreen() {
             </ScrollView>
 
             <View style={bookDisplayScreenStyles.bookActions}>
-                <TouchableOpacity style={bookDisplayScreenStyles.startReadButton} onPress={handleStartReading}>
-                    <Text style={bookDisplayScreenStyles.actionButtonText}>Start Reading</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={bookDisplayScreenStyles.addToLibButton} onPress={handleAddToLibrary}>
-                    <Image source={addToLibIcon} style={{width: 28, height: 28}} />
-                </TouchableOpacity>
+                <View style={bookDisplayScreenStyles.topRow}>
+                    <TouchableOpacity style={bookDisplayScreenStyles.addToLibButton} onPress={handleAddToLibrary}>
+                        <Image source={addToLibIcon} style={{width: 28, height: 28}} />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={bookDisplayScreenStyles.actionRow}>
+                    <TouchableOpacity style={bookDisplayScreenStyles.startReadButton} onPress={handleStartReading}>
+                        <Text style={bookDisplayScreenStyles.actionButtonText}>Start Reading</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={bookDisplayScreenStyles.rateButton} onPress={handleRateBook}>
+                        <Text style={bookDisplayScreenStyles.rateButtonText}>Rate</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
         </View>

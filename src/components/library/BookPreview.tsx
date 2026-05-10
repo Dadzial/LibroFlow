@@ -13,10 +13,11 @@ export interface LibraryBookPreviewProps {
 }
 
 export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, book, onRemove }) => {
-    const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks } = useBooks();
+    const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks, getBookReview } = useBooks() as any;
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const isFavorite = favoriteBooks.some((b: Book) => b.id === book.id);
     const isToRead = toReadBooks.some((b: Book) => b.id === book.id);
+    const review = getBookReview(book.id);
     const deleteIcon = getIcon('deleteIcon');
     const heartIcon = getIcon('favIcon'); 
     const toReadIcon = getIcon('toReadIcon');
@@ -65,6 +66,16 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
             <Text style={styles.author}>
                 {book.author}
             </Text>
+            {review && (
+                <View style={styles.reviewContainer}>
+                    <Text style={styles.reviewRating}>★ {review.rating}/5</Text>
+                    {review.note ? (
+                        <Text numberOfLines={2} style={styles.reviewNote}>
+                            {review.note}
+                        </Text>
+                    ) : null}
+                </View>
+            )}
         </View>
     );
 };
@@ -88,6 +99,21 @@ const styles = StyleSheet.create({
     author: {
         fontSize: 12,
         color: 'gray',
+    },
+    reviewContainer: {
+        width: 100,
+        marginTop: 4,
+        gap: 2,
+    },
+    reviewRating: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: '#F59E0B',
+    },
+    reviewNote: {
+        fontSize: 11,
+        color: '#4B5563',
+        lineHeight: 14,
     },
     actionsContainer: {
         position: 'absolute',

@@ -42,7 +42,7 @@ export const bookDisplayScreenStyles = StyleSheet.create({
     },
     bookDescription: {
         flex: 1,
-        marginBottom: 20,
+        marginBottom: 0,
         paddingHorizontal: 4,
         paddingRight: 16,
     },
@@ -84,11 +84,19 @@ export const bookDisplayScreenStyles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bookActions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: 'column',
         marginBottom: 10,
         gap: 12,
+    },
+    actionRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    topRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginBottom: 8,
     },
     startReadButton: {
         flex: 1,
@@ -96,12 +104,23 @@ export const bookDisplayScreenStyles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 10,
         alignItems: 'center',
-        marginRight: 6,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    rateButton: {
+        flex: 1,
+        backgroundColor: getColor('secondColor'),
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.18,
+        shadowRadius: 4,
+        elevation: 4,
     },
     addToLibButton: {
         width: 44,
@@ -118,6 +137,11 @@ export const bookDisplayScreenStyles = StyleSheet.create({
     },
     actionButtonText: {
         color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    rateButtonText: {
+        color: '#222',
         fontWeight: 'bold',
         fontSize: 16,
     },

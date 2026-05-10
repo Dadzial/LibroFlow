@@ -9,6 +9,7 @@ export type RootStackParamList = {
     Splash: undefined;
     Main: undefined;
     BookDisplay: { bookId: string };
+    RateBook: { book: Book };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -28,6 +29,7 @@ export default function RootNavigator() {
             />
             <Stack.Screen name="Main" component={BottomTabs} />
             <Stack.Screen name="BookDisplay" component={BookDisplayScreen} />
+            <Stack.Screen name="RateBook" component={RateBookScreen} />
         </Stack.Navigator>
     );
 }

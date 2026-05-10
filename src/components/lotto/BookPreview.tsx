@@ -1,13 +1,16 @@
+import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useTheme } from '../../context/ThemeContext';
+import { Book } from '../../context/BooksContext';
 
 interface BookPreviewProps {
     isDrawing: boolean;
-    finalBook: any;
-    books: any[];
+    finalBook: Book | null;
+    books: Book[];
 }
 
 export default function BookPreview({ isDrawing, finalBook, books }: BookPreviewProps) {
+    const { themeColors } = useTheme();
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -35,15 +38,15 @@ export default function BookPreview({ isDrawing, finalBook, books }: BookPreview
         <View style={styles.container}>
             <Image
                 source={{ uri: books[leftIndex]?.cover }}
-                style={[styles.book, styles.left]}
+                style={[styles.book, styles.left, { backgroundColor: themeColors.secondColor }]}
             />
             <Image
                 source={{ uri: books[displayIndex]?.cover }}
-                style={styles.center}
+                style={[styles.center, { backgroundColor: themeColors.secondColor }]}
             />
             <Image
                 source={{ uri: books[rightIndex]?.cover }}
-                style={[styles.book, styles.right]}
+                style={[styles.book, styles.right, { backgroundColor: themeColors.secondColor }]}
             />
         </View>
     );

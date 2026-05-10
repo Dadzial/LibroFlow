@@ -4,6 +4,8 @@ import BottomTabs from './BottomTabs';
 import Header from '../components/core/Header';
 import BookDisplayScreen from "../screens/books-display/BookDisplayScreen";
 import SplashScreen from '../screens/splash-screen/SplashScreen';
+import RateBookScreen from "../screens/rating/RateBookScreen";
+import {Book} from "../context/BooksContext";
 
 export type RootStackParamList = {
     Splash: undefined;

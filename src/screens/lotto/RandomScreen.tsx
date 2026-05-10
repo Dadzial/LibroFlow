@@ -88,7 +88,7 @@ export default function RandomScreen() {
                 onPress={handleDraw}
                 disabled={loading || !books.length || isDrawing}
             >
-                <Text style={randomStyles.drawButtonText}>
+                <Text style={[randomStyles.drawButtonText, { color: themeColors.accent }]}>
                     {isDrawing ? "Choosing..." : "Draw your book"}
                 </Text>
             </TouchableOpacity>

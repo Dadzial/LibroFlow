@@ -5,6 +5,7 @@ import MyBooks from "../../components/library/MyBooks";
 import { LibraryBookPreview } from "../../components/library/BookPreview";
 import { Book, useBooks } from "../../context/BooksContext";
 import { useTheme } from '../../context/ThemeContext';
+import {getThemeColors} from "../../utils/ColorsParser";
 
 const { width } = Dimensions.get('window');
 const PADDING = 25;
@@ -13,6 +14,7 @@ const CARD_WIDTH = (width - 2 * PADDING - 2 * GAP) / 3;
 
 export default function LibraryScreen() {
     const { favoriteBooks, ratedBooks, removeBookFromLibrary } = useBooks() as any;
+    const themeColors = getThemeColors(useTheme().theme);
 
     return (
         <View style={[libraryStyles.container, { backgroundColor: themeColors.primaryColor }]}>

@@ -1,12 +1,13 @@
 import {ScrollView, TouchableOpacity, View, Text, Image, ActivityIndicator} from 'react-native';
 import {bookDisplayScreenStyles} from "./BookDisplayScreen.styles";
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import {useRoute, useNavigation, RouteProp} from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { fetchAllBooks } from "../../api/FetchAllBooks";
 import {getIcon} from "../../utils/IconParser";
 import { useBooks, Book } from '../../context/BooksContext';
 import { RootStackParamList } from '../../navigation/RootNavigator';
 import { useTheme } from '../../context/ThemeContext';
+import {getThemeColors} from "../../utils/ColorsParser";
 
 export default function BookDisplayScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'BookDisplay'>>();
@@ -17,6 +18,7 @@ export default function BookDisplayScreen() {
     const [error, setError] = useState<string | null>(null);
     const addToLibIcon = getIcon('addTolibIcon');
     const { addBookToLibrary, setCurrentlyReadingBook } = useBooks();
+    const themeColors = getThemeColors(useTheme().theme);
 
     useEffect(() => {
         const loadBook = async () => {

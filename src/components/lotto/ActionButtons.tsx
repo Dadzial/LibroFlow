@@ -1,4 +1,6 @@
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTheme } from '../../context/ThemeContext';
 
 interface ActionButtonsProps {
     onAddToLibrary?: () => void;
@@ -7,10 +9,16 @@ interface ActionButtonsProps {
 }
 
 export default function ActionButtons({ onAddToLibrary, onStartReading, disabled }: ActionButtonsProps) {
+    const { themeColors, isDark } = useTheme();
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={[styles.primary, disabled && { opacity: 0.5 }]}
+                style={[
+                    styles.primary, 
+                    { backgroundColor: themeColors.accent },
+                    disabled && { opacity: 0.5 }
+                ]}
                 onPress={onStartReading}
                 disabled={disabled}
             >
@@ -18,11 +26,15 @@ export default function ActionButtons({ onAddToLibrary, onStartReading, disabled
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.secondary, disabled && { opacity: 0.5 }]}
+                style={[
+                    styles.secondary, 
+                    { backgroundColor: themeColors.secondColor },
+                    disabled && { opacity: 0.5 }
+                ]}
                 onPress={onAddToLibrary}
                 disabled={disabled}
             >
-                <Text style={styles.secondaryText}>Add to library</Text>
+                <Text style={[styles.secondaryText, { color: themeColors.accent }]}>Add to library</Text>
             </TouchableOpacity>
         </View>
     );
@@ -33,7 +45,6 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     primary: {
-        backgroundColor: '#7B3FE4',
         paddingVertical: 12,
         borderRadius: 20,
         alignItems: 'center',
@@ -46,7 +57,6 @@ const styles = StyleSheet.create({
     },
     secondary: {
         marginTop: 10,
-        backgroundColor: '#ffffff',
         paddingVertical: 12,
         borderRadius: 20,
         alignItems: 'center',
@@ -54,7 +64,6 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     secondaryText: {
-        color: '#7B3FE4',
         fontWeight: '600',
     },
 });

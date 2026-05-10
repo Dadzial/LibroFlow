@@ -14,6 +14,7 @@ export interface LibraryBookPreviewProps {
 }
 
 export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, book, onRemove }) => {
+    const { themeColors, isDark } = useTheme();
     const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks, getBookReview } = useBooks() as any;
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const isFavorite = favoriteBooks.some((b: Book) => b.id === book.id);

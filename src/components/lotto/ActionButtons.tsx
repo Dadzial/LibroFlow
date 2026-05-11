@@ -9,7 +9,7 @@ interface ActionButtonsProps {
 }
 
 export default function ActionButtons({ onAddToLibrary, onStartReading, disabled }: ActionButtonsProps) {
-    const { themeColors, isDark } = useTheme();
+    const { themeColors } = useTheme();
 
     return (
         <View style={styles.container}>
@@ -34,7 +34,7 @@ export default function ActionButtons({ onAddToLibrary, onStartReading, disabled
                 onPress={onAddToLibrary}
                 disabled={disabled}
             >
-                <Text style={[styles.secondaryText, { color: themeColors.accent }]}>Add to library</Text>
+                <Text style={[styles.secondaryText, { color: themeColors.textPrimaryColor }]}>Add to library</Text>
             </TouchableOpacity>
         </View>
     );

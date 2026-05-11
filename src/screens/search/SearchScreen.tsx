@@ -8,6 +8,7 @@ import {useState} from "react";
 import { useTheme } from '../../context/ThemeContext';
 
 
+
 const MAIN_CATEGORIES = [
     'Fantasy',
     'Sci-Fi',

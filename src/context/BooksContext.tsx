@@ -53,20 +53,28 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     const [toReadIds, setToReadIds] = useState<(string | number)[]>([]);
     const [bookReviewsById, setBookReviewsById] = useState<Record<string, BookReview>>({});
     const [currentlyReadingBook, setCurrentlyReadingBook] = useState<Book | null>(null);
-    const [readingTime, setReadingTime] = useState(0);
+    const [readingTimesById, setReadingTimesById] = useState<Record<string, number>>({});
     const [isReading, setIsReading] = useState(false);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if (isReading) {
+        if (isReading && currentlyReadingBook) {
+            const bookId = String(currentlyReadingBook.id);
             interval = setInterval(() => {
-                setReadingTime((prev) => prev + 1);
+                setReadingTimesById((prev) => ({
+                    ...prev,
+                    [bookId]: (prev[bookId] || 0) + 1,
+                }));
             }, 1000);
         }
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [isReading]);
+    }, [isReading, currentlyReadingBook]);
+
+    const readingTime = currentlyReadingBook 
+        ? (readingTimesById[String(currentlyReadingBook.id)] || 0) 
+        : 0;
 
     const addBookToLibrary = (book: Book) => {
         setLibraryBooks((prev) => {

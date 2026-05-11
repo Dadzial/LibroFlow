@@ -55,20 +55,6 @@ export default function CurrentlyReadingCard() {
                     <View style={styles.timerContainer}>
                         <Text style={[styles.timerText, { backgroundColor: themeColors.accent + '33', color: themeColors.accent }]}>{formatTime(readingTime)}</Text>
                     </View>
-                    
-                    <View style={styles.progressRow}>
-                        <View style={[styles.progressBar, { backgroundColor: themeColors.primaryColor }]}>
-                            <View
-                                style={[
-                                    styles.progress,
-                                    { width: `${progress * 100}%`, backgroundColor: themeColors.accent },
-                                ]}
-                            />
-                        </View>
-                        <Text style={[styles.progressText, { color: themeColors.textPrimaryColor }]}>
-                            {Math.round(progress * 100)}%
-                        </Text>
-                    </View>
 
                     <TouchableOpacity
                         style={[styles.button, { backgroundColor: themeColors.accent }, isReading && styles.buttonActive]}

@@ -153,11 +153,13 @@ export function BooksProvider({ children }: { children: ReactNode }) {
 
     const favoriteBooks = libraryBooks.filter(book => {
         const isFavorite = favoriteIds.includes(book.id);
-        const hasRating5 = Object.values(bookReviewsById).some(review => review.book.id === book.id && review.rating === 5);
+        const review = bookReviewsById[String(book.id)];
+        const hasRating5 = review?.rating === 5;
         return isFavorite || hasRating5;
     });
     const toReadBooks = libraryBooks.filter(book => toReadIds.includes(book.id));
     const ratedBooks = Object.values(bookReviewsById)
+        .filter((review) => libraryBooks.some((b) => String(b.id) === String(review.book.id)))
         .map((review) => review.book)
         .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
 

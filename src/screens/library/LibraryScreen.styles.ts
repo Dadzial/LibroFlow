@@ -22,7 +22,7 @@ export const libraryStyles = StyleSheet.create({
         color: getColor('textPrimaryColor'),
     },
     screenDescription: {
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: '300',
         textShadowColor: 'rgba(147,146,146,0.3)',
         textShadowOffset: { width: 2, height: 2 },
@@ -41,7 +41,6 @@ export const libraryStyles = StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: getColor('textPrimaryColor'),
     },
     viewAll: {
         color: '#6A28B0',

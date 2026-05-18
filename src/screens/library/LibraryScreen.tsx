@@ -13,7 +13,7 @@ const GAP = 15;
 const CARD_WIDTH = (width - 2 * PADDING - 2 * GAP) / 3;
 
 export default function LibraryScreen() {
-    const { favoriteBooks, ratedBooks, removeBookFromLibrary } = useBooks() as any;
+    const { favoriteBooks, ratedBooks, removeBookFromLibrary, libraryBooks } = useBooks() as any;
     const themeColors = getThemeColors(useTheme().theme);
 
     return (
@@ -28,10 +28,13 @@ export default function LibraryScreen() {
                 </View>
 
                 <View style={libraryStyles.sectionHeader}>
-                    <Text style={[libraryStyles.sectionTitle, { color: themeColors.textPrimaryColor }]}>Favorites</Text>
+                    <Text style={[
+                        libraryStyles.sectionTitle, 
+                        (favoriteBooks && favoriteBooks.length > 0) ? { color: themeColors.textPrimaryColor } : { color: themeColors.textSecondaryColor }
+                    ]}>Favorites</Text>
                 </View>
 
-                {favoriteBooks.length > 0 ? (
+                {favoriteBooks && favoriteBooks.length > 0 ? (
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -57,10 +60,13 @@ export default function LibraryScreen() {
                 )}
 
                 <View style={libraryStyles.sectionHeader}>
-                    <Text style={libraryStyles.sectionTitle}>Rated Books</Text>
+                    <Text style={[
+                        libraryStyles.sectionTitle, 
+                        (ratedBooks && ratedBooks.length > 0) ? { color: themeColors.textPrimaryColor } : { color: themeColors.textSecondaryColor }
+                    ]}>Rated Books</Text>
                 </View>
 
-                {ratedBooks.length > 0 ? (
+                {ratedBooks && ratedBooks.length > 0 ? (
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -86,7 +92,10 @@ export default function LibraryScreen() {
                 )}
 
                 <View style={libraryStyles.sectionHeader}>
-                    <Text style={libraryStyles.sectionTitle}>All Books</Text>
+                    <Text style={[
+                        libraryStyles.sectionTitle, 
+                        (libraryBooks && libraryBooks.length > 0) ? { color: themeColors.textPrimaryColor } : { color: themeColors.textSecondaryColor}
+                    ]}>All Books</Text>
                 </View>
 
                 <View style={libraryStyles.section}>

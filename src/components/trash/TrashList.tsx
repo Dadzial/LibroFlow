@@ -50,7 +50,7 @@ export default function TrashList() {
                 contentContainerStyle={styles.listContent}
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>Trash is empty.</Text>
+                        <Text style={styles.emptyText}>Book cemetery is empty.</Text>
                     </View>
                 }
             />

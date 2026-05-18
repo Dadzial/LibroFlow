@@ -8,9 +8,9 @@ export default function TrashScreen() {
     return (
         <View style={[trashStyles.container, { backgroundColor: themeColors.primaryColor }]}>
             <View style={trashStyles.screenTitleContainer}>
-                <Text style={[trashStyles.screenTitle, { color: themeColors.textPrimaryColor }]}>Trash</Text>
+                <Text style={[trashStyles.screenTitle, { color: themeColors.textPrimaryColor }]}>Book Cemetery</Text>
                 <Text style={[trashStyles.screenDescription, { color: themeColors.textPrimaryColor }]}>
-                    Items in the trash will be permanently deleted after 30 days.
+                    Items in the Book Cemetery will be permanently deleted after 30 days.
                     You can restore them or delete them manually now.
                 </Text>
             </View>

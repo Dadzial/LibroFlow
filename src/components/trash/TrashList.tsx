@@ -38,7 +38,7 @@ export default function TrashList() {
                 <Text style={[styles.headerTitle, { color: themeColors.textPrimaryColor }]}>{trashBooks.length} Items found</Text>
                 {trashBooks.length > 0 && (
                     <TouchableOpacity onPress={clearTrash}>
-                        <Text style={styles.cleanTrash}>Clean Trash</Text>
+                        <Text style={styles.cleanTrash}>Clean Book Cemetery</Text>
                     </TouchableOpacity>
                 )}
             </View>

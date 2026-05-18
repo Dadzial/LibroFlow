@@ -15,10 +15,11 @@ export interface LibraryBookPreviewProps {
 
 export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, book, onRemove }) => {
     const { themeColors, isDark } = useTheme();
-    const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks, getBookReview } = useBooks() as any;
+    const { toggleFavorite, favoriteBooks, toggleToRead, toReadBooks, getBookReview, allReadBookIds, markBookAsRead, unmarkBookAsRead } = useBooks() as any;
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const isFavorite = favoriteBooks.some((b: Book) => b.id === book.id);
     const isToRead = toReadBooks.some((b: Book) => b.id === book.id);
+    const isRead = allReadBookIds.includes(book.id);
     const review = getBookReview(book.id);
     const deleteIcon = getIcon('deleteIcon');
     const heartIcon = getIcon('favIcon'); 
@@ -67,6 +68,16 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
                         onPress={() => toggleToRead(book.id)}
                     >
                         <Image source={toReadIcon} style={[styles.icon, {tintColor: isToRead ? '#FFF' : (isDark ? '#BBB' : '#666')}]} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[
+                            styles.actionButton,
+                            { backgroundColor: isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' },
+                            isRead && styles.readActive
+                        ]}
+                        onPress={() => isRead ? unmarkBookAsRead(book.id) : markBookAsRead(book.id)}
+                    >
+                        <Text style={[styles.checkmark, {color: isRead ? '#10B981' : (isDark ? '#BBB' : '#666')}]}>✓</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -151,8 +162,15 @@ const styles = StyleSheet.create({
     toReadActive: {
         backgroundColor: '#3B82F6', 
     },
+    readActive: {
+        backgroundColor: '#10B981',
+    },
     icon: {
         width: 18,
         height: 18,
+    },
+    checkmark: {
+        fontSize: 20,
+        fontWeight: 'bold',
     }
 });

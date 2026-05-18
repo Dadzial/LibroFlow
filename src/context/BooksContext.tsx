@@ -30,6 +30,10 @@ export interface BooksContextType {
     currentlyReadingBook: Book | null;
     readingTime: number;
     isReading: boolean;
+    readingGoalTarget: number | null;
+    readingGoalCompletedCount: number;
+    readBookIds: (string | number)[];
+    allReadBookIds: (string | number)[];
     addBookToLibrary: (book: Book) => void;
     removeBookFromLibrary: (bookId: string | number) => void;
     toggleFavorite: (bookId: string | number) => void;
@@ -42,6 +46,12 @@ export interface BooksContextType {
     getBookReview: (bookId: string | number) => BookReview | null;
     saveBookReview: (book: Book, rating: number, note: string) => void;
     clearBookReview: (bookId: string | number) => void;
+    setReadingGoal: (target: number) => void;
+    cancelReadingGoal: () => void;
+    resetReadingGoalCompletely: () => void;
+    clearReadBookIds: () => void;
+    markBookAsRead: (bookId: string | number) => void;
+    unmarkBookAsRead: (bookId: string | number) => void;
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
@@ -55,6 +65,9 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     const [currentlyReadingBook, setCurrentlyReadingBook] = useState<Book | null>(null);
     const [readingTimesById, setReadingTimesById] = useState<Record<string, number>>({});
     const [isReading, setIsReading] = useState(false);
+    const [readingGoalTarget, setReadingGoalTarget] = useState<number | null>(null);
+    const [readBookIds, setReadBookIds] = useState<(string | number)[]>([]);
+    const [allReadBookIds, setAllReadBookIds] = useState<(string | number)[]>([]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -152,11 +165,52 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     const getBookReview = (bookId: string | number) => bookReviewsById[String(bookId)] ?? null;
 
     const clearBookReview = (bookId: string | number) => {
-        setBookReviewsById((prev) => {
-            const updated = { ...prev };
-            delete updated[String(bookId)];
-            return updated;
+         setBookReviewsById((prev) => {
+             const updated = { ...prev };
+             delete updated[String(bookId)];
+             return updated;
+         });
+     };
+
+    const setReadingGoal = (target: number) => {
+        setReadingGoalTarget(target);
+        setReadBookIds([]); // Reset current goal progress
+        // Keep allReadBookIds - they show as marked in UI but don't count toward goal
+    };
+
+    const cancelReadingGoal = () => {
+        setReadingGoalTarget(null);
+        // Keep readBookIds - history of read books remains
+    };
+
+    const resetReadingGoalCompletely = () => {
+        setReadingGoalTarget(null);
+        setReadBookIds([]);
+        setAllReadBookIds([]);
+    };
+
+    const clearReadBookIds = () => {
+        setReadBookIds([]);
+    };
+
+    const markBookAsRead = (bookId: string | number) => {
+        setReadBookIds((prev) => {
+            if (prev.includes(bookId)) {
+                return prev;
+            }
+            return [...prev, bookId];
         });
+        // Also add to all-time history
+        setAllReadBookIds((prev) => {
+            if (prev.includes(bookId)) {
+                return prev;
+            }
+            return [...prev, bookId];
+        });
+    };
+
+    const unmarkBookAsRead = (bookId: string | number) => {
+        setReadBookIds((prev) => prev.filter((id) => id !== bookId));
     };
 
     const favoriteBooks = libraryBooks.filter(book => {
@@ -181,7 +235,11 @@ export function BooksProvider({ children }: { children: ReactNode }) {
              currentlyReadingBook,
              readingTime,
              isReading,
-             addBookToLibrary,
+              readingGoalTarget,
+              readingGoalCompletedCount: readBookIds.length,
+              readBookIds,
+              allReadBookIds,
+              addBookToLibrary,
              removeBookFromLibrary,
              toggleFavorite,
              toggleToRead,
@@ -192,8 +250,14 @@ export function BooksProvider({ children }: { children: ReactNode }) {
              setIsReading,
              getBookReview,
              saveBookReview,
-             clearBookReview,
-         }}>
+              clearBookReview,
+              setReadingGoal,
+              cancelReadingGoal,
+              resetReadingGoalCompletely,
+              clearReadBookIds,
+              markBookAsRead,
+              unmarkBookAsRead,
+          }}>
             {children}
         </BooksContext.Provider>
     );

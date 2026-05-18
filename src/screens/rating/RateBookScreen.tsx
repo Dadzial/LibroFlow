@@ -9,7 +9,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -23,7 +24,7 @@ export default function RateBookScreen() {
     const navigation = useNavigation<any>();
     const { book } = route.params;
     const booksContext = useBooks() as any;
-    const { getBookReview, saveBookReview, clearBookReview } = booksContext;
+    const { getBookReview, saveBookReview, clearBookReview, libraryBooks, addBookToLibrary } = booksContext;
     const { themeColors, isDark } = useTheme();
 
     const existingReview = useMemo(() => getBookReview(book.id), [book.id, getBookReview]);
@@ -42,8 +43,33 @@ export default function RateBookScreen() {
 
     const handleSave = () => {
         if (!selectedRating) return;
-        saveBookReview(book, selectedRating, note.trim());
-        navigation.goBack();
+
+        // Check if book is in library
+        const isBookInLibrary = libraryBooks.some((b: any) => b.id === book.id || b.title === book.title);
+
+        if (!isBookInLibrary) {
+            Alert.alert(
+                'Add to library first',
+                'You must add this book to your library before saving the rating.',
+                [
+                    {
+                        text: 'Add to library',
+                        onPress: () => {
+                            addBookToLibrary(book);
+                            saveBookReview(book, selectedRating, note.trim());
+                            navigation.goBack();
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        onPress: () => {}
+                    }
+                ]
+            );
+        } else {
+            saveBookReview(book, selectedRating, note.trim());
+            navigation.goBack();
+        }
     };
 
     const handleClearRating = () => {
@@ -98,8 +124,10 @@ export default function RateBookScreen() {
                             </Text>
 
                             <Text style={[rateBookScreenStyles.noteLabel, { color: themeColors.textPrimaryColor }]}>Notes</Text>
-                            <View
+                            <ScrollView
                                 style={[(rateBookScreenStyles as any).notesScrollContainer, { borderColor: themeColors.textPrimaryColor + '33', height: 150, maxHeight: 150 }]}
+                                scrollEnabled={true}
+                                nestedScrollEnabled={true}
                             >
                                 <TextInput
                                     value={note}
@@ -111,7 +139,7 @@ export default function RateBookScreen() {
                                     editable
                                     style={[rateBookScreenStyles.noteInput, { backgroundColor: themeColors.secondColor, color: themeColors.textPrimaryColor, minHeight: 150 }]}
                                 />
-                            </View>
+                            </ScrollView>
 
                             <TouchableOpacity
                                 style={[rateBookScreenStyles.saveButton, { backgroundColor: themeColors.accent, marginTop: 10 }, !selectedRating && rateBookScreenStyles.saveButtonDisabled]}

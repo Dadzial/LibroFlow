@@ -1,23 +1,48 @@
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Modal } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks } from '../../context/BooksContext';
 import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import Svg, { Circle, G } from 'react-native-svg';
 
 export default function ReadingGoalsCard() {
     const { themeColors } = useTheme();
-    const { readingGoalTarget, readingGoalCompletedCount, setReadingGoal, cancelReadingGoal, resetReadingGoalCompletely } = useBooks();
+    const navigation = useNavigation<any>();
+    const { readingGoalTarget, readingGoalCompletedCount, setReadingGoal, updateReadingGoal, cancelReadingGoal, resetReadingGoalCompletely } = useBooks();
     const [isSettingGoal, setIsSettingGoal] = useState(false);
+    const [isEditingGoal, setIsEditingGoal] = useState(false);
     const [goalInput, setGoalInput] = useState('');
     const [hasShownCompletionMessage, setHasShownCompletionMessage] = useState(false);
+    const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-    const handleSetGoal = () => {
-        const target = parseInt(goalInput, 10);
-        if (target > 0) {
-            setReadingGoal(target);
-            setGoalInput('');
-            setIsSettingGoal(false);
-        }
+     const handleSetGoal = () => {
+         const target = parseInt(goalInput, 10);
+         if (target > 0) {
+             setHasShownCompletionMessage(false);
+             setReadingGoal(target);
+             setGoalInput('');
+             setIsSettingGoal(false);
+         }
+     };
+
+     const handleEditGoal = () => {
+         setGoalInput(readingGoalTarget?.toString() || '');
+         setIsEditingGoal(true);
+     };
+
+     const handleSaveEditedGoal = () => {
+         const target = parseInt(goalInput, 10);
+         if (target > 0) {
+             setHasShownCompletionMessage(false);
+             updateReadingGoal(target);
+             setGoalInput('');
+             setIsEditingGoal(false);
+         }
+     };
+
+    const handleCancelEdit = () => {
+        setGoalInput('');
+        setIsEditingGoal(false);
     };
 
     const handleCancel = () => {
@@ -31,35 +56,15 @@ export default function ReadingGoalsCard() {
         ? Math.round((readingGoalCompletedCount / readingGoalTarget) * 100)
         : 0;
 
-    // Show alert when goal is completed
-    useEffect(() => {
-        if (percentage === 100 && readingGoalTarget && !hasShownCompletionMessage) {
-            setHasShownCompletionMessage(true);
-            Alert.alert(
-                'Congratulations!',
-                `You've completed your reading goal of ${readingGoalTarget} books!`,
-                [
-                    {
-                        text: 'New Goal',
-                        onPress: () => {
-                            resetReadingGoalCompletely();
-                            setHasShownCompletionMessage(false);
-                            setIsSettingGoal(true);
-                        }
-                    },
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            cancelReadingGoal();
-                            setHasShownCompletionMessage(false);
-                        }
-                    }
-                ]
-            );
-        }
-    }, [percentage, readingGoalTarget, hasShownCompletionMessage]);
+     // Show alert when goal is completed
+     useEffect(() => {
+         if (percentage === 100 && readingGoalTarget && !hasShownCompletionMessage) {
+             setHasShownCompletionMessage(true);
+             setShowCompletionModal(true);
+         }
+     }, [readingGoalCompletedCount, readingGoalTarget, hasShownCompletionMessage]);
 
-    const radius = 35;
+     const radius = 35;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
@@ -93,29 +98,119 @@ export default function ReadingGoalsCard() {
                             onChangeText={setGoalInput}
                             autoFocus
                         />
-                        <TouchableOpacity
-                            style={[styles.button, { backgroundColor: themeColors.primaryColor }]}
-                            onPress={handleSetGoal}
-                        >
-                            <Text style={[styles.buttonText, { color: themeColors.textPrimaryColor }]}>
-                                Set
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.button, { backgroundColor: themeColors.primaryColor }]}
-                            onPress={() => setIsSettingGoal(false)}
-                        >
-                            <Text style={[styles.buttonText, { color: themeColors.textPrimaryColor }]}>
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonsRow}>
+                            <TouchableOpacity
+                                style={[styles.button, { backgroundColor: '#6A28B0', flex: 1 }]}
+                                onPress={handleSetGoal}
+                            >
+                                <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                                    Set
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.button, { backgroundColor: '#6A28B0', flex: 1 }]}
+                                onPress={() => setIsSettingGoal(false)}
+                            >
+                                <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                                    Cancel
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 )}
             </View>
         );
     }
 
+    // Show editing UI if in edit mode
+    if (isEditingGoal) {
+        return (
+            <View style={[styles.card, { backgroundColor: themeColors.secondColor }]}>
+                <View style={styles.inputContainer}>
+                    <Text style={[styles.goalText, { color: themeColors.textPrimaryColor }]}>
+                        Edit your reading goal
+                    </Text>
+                    <TextInput
+                        style={[styles.input, {
+                            backgroundColor: themeColors.primaryColor,
+                            color: themeColors.textPrimaryColor,
+                            borderColor: themeColors.textPrimaryColor
+                        }]}
+                        placeholder="Number of books"
+                        placeholderTextColor={themeColors.textPrimaryColor}
+                        keyboardType="numeric"
+                        value={goalInput}
+                        onChangeText={setGoalInput}
+                        autoFocus
+                    />
+                    <View style={styles.buttonsRow}>
+                        <TouchableOpacity
+                            style={[styles.button, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={handleSaveEditedGoal}
+                        >
+                            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                                Save
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={handleCancelEdit}
+                        >
+                            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                                Cancel
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+
     return (
+        <>
+        <Modal
+            visible={showCompletionModal}
+            transparent
+            animationType="fade"
+        >
+            <View style={styles.modalOverlay}>
+                <View style={[styles.modalContent, { backgroundColor: themeColors.secondColor }]}>
+                    <Text style={[styles.modalTitle, { color: themeColors.textPrimaryColor }]}>
+                        Congratulations!
+                    </Text>
+                    <Text style={[styles.modalMessage, { color: themeColors.textPrimaryColor }]}>
+                        You've completed your reading goal of {readingGoalTarget} books!
+                    </Text>
+                    <View style={styles.modalButtonsRow}>
+                        <TouchableOpacity
+                            style={[styles.modalButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={() => {
+                                resetReadingGoalCompletely();
+                                setHasShownCompletionMessage(false);
+                                setShowCompletionModal(false);
+                                setIsSettingGoal(true);
+                                navigation.navigate('Home');
+                            }}
+                        >
+                            <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>
+                                New Goal
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.modalButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={() => {
+                                cancelReadingGoal();
+                                setShowCompletionModal(false);
+                            }}
+                        >
+                            <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>
+                                OK
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
         <View style={[styles.card, { backgroundColor: themeColors.secondColor }]}>
             <View style={styles.row}>
                 <View style={styles.circleContainer}>
@@ -159,15 +254,26 @@ export default function ReadingGoalsCard() {
                     </Text>
                 </View>
             </View>
-            <TouchableOpacity
-                style={[styles.cancelButton, { backgroundColor: themeColors.primaryColor }]}
-                onPress={handleCancel}
-            >
-                <Text style={[styles.cancelButtonText, { color: themeColors.textPrimaryColor }]}>
-                    Cancel Goal
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                    style={[styles.cancelButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                    onPress={handleEditGoal}
+                >
+                    <Text style={[styles.cancelButtonText, { color: '#FFFFFF' }]}>
+                        Edit
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.cancelButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                    onPress={handleCancel}
+                >
+                    <Text style={[styles.cancelButtonText, { color: '#FFFFFF' }]}>
+                        Cancel Goal
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
+        </>
     );
 }
 
@@ -259,14 +365,75 @@ const styles = StyleSheet.create({
     },
 
     cancelButton: {
-        marginTop: 16,
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
     },
 
+    buttonsContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        marginTop: 16,
+    },
+
+    buttonsRow: {
+        flexDirection: 'row',
+        gap: 10,
+        width: '100%',
+        paddingHorizontal: 10,
+    },
+
     cancelButtonText: {
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    modalContent: {
+        borderRadius: 16,
+        padding: 24,
+        width: '80%',
+        alignItems: 'center',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 4 },
+    },
+
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 12,
+    },
+
+    modalMessage: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 24,
+        lineHeight: 22,
+    },
+
+    modalButtonsRow: {
+        flexDirection: 'row',
+        gap: 12,
+        width: '100%',
+    },
+
+    modalButton: {
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+
+    modalButtonText: {
         fontWeight: 'bold',
         fontSize: 14,
     },

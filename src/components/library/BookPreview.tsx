@@ -84,7 +84,7 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
             <Text numberOfLines={1} style={[styles.title, { color: themeColors.textPrimaryColor }]}>
                 {book.title}
             </Text>
-            <Text style={[styles.author, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.author, { color: themeColors.textPrimaryColor, opacity: 0.7 }]}>
                 {book.author}
             </Text>
             {review && (
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     author: {
         fontSize: 12,
         color: 'gray',
+        width: 100,
     },
     reviewContainer: {
         width: 100,

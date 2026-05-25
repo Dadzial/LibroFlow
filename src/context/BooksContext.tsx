@@ -47,6 +47,7 @@ export interface BooksContextType {
     saveBookReview: (book: Book, rating: number, note: string) => void;
     clearBookReview: (bookId: string | number) => void;
     setReadingGoal: (target: number) => void;
+    updateReadingGoal: (target: number) => void;
     cancelReadingGoal: () => void;
     resetReadingGoalCompletely: () => void;
     clearReadBookIds: () => void;
@@ -172,22 +173,26 @@ export function BooksProvider({ children }: { children: ReactNode }) {
          });
      };
 
-    const setReadingGoal = (target: number) => {
-        setReadingGoalTarget(target);
-        setReadBookIds([]); // Reset current goal progress
-        // Keep allReadBookIds - they show as marked in UI but don't count toward goal
-    };
+     const setReadingGoal = (target: number) => {
+         setReadingGoalTarget(target);
+         setReadBookIds([]); // Reset current goal progress
+         // Keep allReadBookIds - they show as marked in UI but don't count toward goal
+     };
 
-    const cancelReadingGoal = () => {
+     const updateReadingGoal = (target: number) => {
+         setReadingGoalTarget(target);
+         // Keep readBookIds - maintain current progress when updating goal
+     };
+
+     const cancelReadingGoal = () => {
         setReadingGoalTarget(null);
         // Keep readBookIds - history of read books remains
     };
 
-    const resetReadingGoalCompletely = () => {
-        setReadingGoalTarget(null);
-        setReadBookIds([]);
-        setAllReadBookIds([]);
-    };
+     const resetReadingGoalCompletely = () => {
+         setReadingGoalTarget(null);
+         setReadBookIds([]);
+     };
 
     const clearReadBookIds = () => {
         setReadBookIds([]);
@@ -226,38 +231,39 @@ export function BooksProvider({ children }: { children: ReactNode }) {
         .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
 
     return (
-        <BooksContext.Provider value={{ 
-             libraryBooks,
-             favoriteBooks,
-             toReadBooks,
-             trashBooks,
-             ratedBooks,
-             currentlyReadingBook,
-             readingTime,
-             isReading,
-              readingGoalTarget,
-              readingGoalCompletedCount: readBookIds.length,
-              readBookIds,
-              allReadBookIds,
-              addBookToLibrary,
-             removeBookFromLibrary,
-             toggleFavorite,
-             toggleToRead,
-             restoreFromTrash,
-             permanentDeleteFromTrash,
-             clearTrash,
-             setCurrentlyReadingBook,
-             setIsReading,
-             getBookReview,
-             saveBookReview,
-              clearBookReview,
-              setReadingGoal,
-              cancelReadingGoal,
-              resetReadingGoalCompletely,
-              clearReadBookIds,
-              markBookAsRead,
-              unmarkBookAsRead,
-          }}>
+         <BooksContext.Provider value={{
+              libraryBooks,
+              favoriteBooks,
+              toReadBooks,
+              trashBooks,
+              ratedBooks,
+              currentlyReadingBook,
+              readingTime,
+              isReading,
+               readingGoalTarget,
+               readingGoalCompletedCount: readBookIds.length,
+               readBookIds,
+               allReadBookIds,
+               addBookToLibrary,
+              removeBookFromLibrary,
+              toggleFavorite,
+              toggleToRead,
+              restoreFromTrash,
+              permanentDeleteFromTrash,
+              clearTrash,
+              setCurrentlyReadingBook,
+              setIsReading,
+              getBookReview,
+              saveBookReview,
+               clearBookReview,
+               setReadingGoal,
+               updateReadingGoal,
+               cancelReadingGoal,
+               resetReadingGoalCompletely,
+               clearReadBookIds,
+               markBookAsRead,
+               unmarkBookAsRead,
+           }}>
             {children}
         </BooksContext.Provider>
     );

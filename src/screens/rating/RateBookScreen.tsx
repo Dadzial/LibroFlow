@@ -10,14 +10,14 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    Alert
+    Modal
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/RootNavigator';
 import { useBooks } from '../../context/BooksContext';
 import { useTheme } from '../../context/ThemeContext';
-import { rateBookScreenStyles } from './RateBookScreenStyles';
+import { rateBookScreenStyles } from './RateBookScreen.styles';
 
 export default function RateBookScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'RateBook'>>();
@@ -35,42 +35,26 @@ export default function RateBookScreen() {
 
     const [selectedRating, setSelectedRating] = useState<number>(initialRating);
     const [note, setNote] = useState<string>(existingReview?.note ?? '');
+    const [showAddToLibraryModal, setShowAddToLibraryModal] = useState(false);
 
     useEffect(() => {
         setSelectedRating(initialRating);
         setNote(existingReview?.note ?? '');
     }, [book.id, existingReview, initialRating]);
 
-    const handleSave = () => {
-        if (!selectedRating) return;
+     const handleSave = () => {
+         if (!selectedRating) return;
 
-        // Check if book is in library
-        const isBookInLibrary = libraryBooks.some((b: any) => b.id === book.id || b.title === book.title);
+         // Check if book is in library
+         const isBookInLibrary = libraryBooks.some((b: any) => b.id === book.id || b.title === book.title);
 
-        if (!isBookInLibrary) {
-            Alert.alert(
-                'Add to library first',
-                'You must add this book to your library before saving the rating.',
-                [
-                    {
-                        text: 'Add to library',
-                        onPress: () => {
-                            addBookToLibrary(book);
-                            saveBookReview(book, selectedRating, note.trim());
-                            navigation.goBack();
-                        }
-                    },
-                    {
-                        text: 'Cancel',
-                        onPress: () => {}
-                    }
-                ]
-            );
-        } else {
-            saveBookReview(book, selectedRating, note.trim());
-            navigation.goBack();
-        }
-    };
+         if (!isBookInLibrary) {
+             setShowAddToLibraryModal(true);
+         } else {
+             saveBookReview(book, selectedRating, note.trim());
+             navigation.goBack();
+         }
+     };
 
     const handleClearRating = () => {
         clearBookReview(book.id);
@@ -79,6 +63,46 @@ export default function RateBookScreen() {
     };
 
     return (
+        <>
+        <Modal
+            visible={showAddToLibraryModal}
+            transparent
+            animationType="fade"
+        >
+            <View style={rateBookScreenStyles.modalOverlay}>
+                <View style={[rateBookScreenStyles.modalContent, { backgroundColor: themeColors.secondColor }]}>
+                    <Text style={[rateBookScreenStyles.modalTitle, { color: themeColors.textPrimaryColor }]}>
+                        Add to library first
+                    </Text>
+                    <Text style={[rateBookScreenStyles.modalMessage, { color: themeColors.textPrimaryColor }]}>
+                        You must add this book to your library before saving the rating.
+                    </Text>
+                    <View style={rateBookScreenStyles.modalButtonsRow}>
+                        <TouchableOpacity
+                            style={[rateBookScreenStyles.modalButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={() => {
+                                addBookToLibrary(book);
+                                saveBookReview(book, selectedRating, note.trim());
+                                setShowAddToLibraryModal(false);
+                                navigation.goBack();
+                            }}
+                        >
+                            <Text style={[rateBookScreenStyles.modalButtonText, { color: '#FFFFFF' }]}>
+                                Add to library
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[rateBookScreenStyles.modalButton, { backgroundColor: '#6A28B0', flex: 1 }]}
+                            onPress={() => setShowAddToLibraryModal(false)}
+                        >
+                            <Text style={[rateBookScreenStyles.modalButtonText, { color: '#FFFFFF' }]}>
+                                Cancel
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: themeColors.primaryColor }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -169,5 +193,6 @@ export default function RateBookScreen() {
                 </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        </>
     );
 }

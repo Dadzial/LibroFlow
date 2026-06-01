@@ -24,7 +24,7 @@ export default function MyBooks() {
     }
 
     return (
-        <View style={{ width: '100%', paddingHorizontal: 20 }}>
+        <View style={{ width: '100%' }}>
             <FlatList
                 data={allBooks}
                 numColumns={3}
@@ -33,7 +33,8 @@ export default function MyBooks() {
                 columnWrapperStyle={{
                     justifyContent: 'flex-start',
                     gap: 15,
-                    marginBottom: 25
+                    marginBottom: 25,
+                    paddingHorizontal: 20,
                 }}
                 contentContainerStyle={{
                     paddingVertical: 10,

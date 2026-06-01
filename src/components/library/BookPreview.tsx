@@ -105,7 +105,7 @@ export const LibraryBookPreview: React.FC<LibraryBookPreviewProps> = ({ style, b
 
 const styles = StyleSheet.create({
     container: {
-        marginRight: 15,
+        // ...existing code...
     },
     cover: {
         width: 100,

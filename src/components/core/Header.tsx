@@ -14,7 +14,7 @@ export default function Header() {
             <View style={stylesHeader.contentWrapper}>
                 <View style={stylesHeader.leftSection}>
                     <Image source={getIcon('headerIcon')} style={stylesHeader.logo} />
-                    <Text style={[stylesHeader.title, { color: themeColors.accent }]}>LibroFlow</Text>
+                    <Text style={[stylesHeader.title, { color: themeColors.accent }]}>My Reading Journal</Text>
                 </View>
                 <TouchableOpacity onPress={toggleTheme} style={stylesHeader.themeButton}>
                     <Ionicons
